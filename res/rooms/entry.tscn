@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cb642xa7kwqyk"]
+
+[ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
+[ext_resource type="Script" path="res://src/util/GameObject.cs" id="2_vdd0s"]
+[ext_resource type="Script" path="res://src/actors/MyTestComponent.cs" id="3_qdyua"]
+[ext_resource type="Script" path="res://src/actors/MyTestScript.cs" id="3_vm8dp"]
+
+[node name="Entry" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_rpbss")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+
+[node name="Player" type="Node3D" parent="."]
+script = ExtResource("2_vdd0s")
+Components = [NodePath("MyTestComponent")]
+
+[node name="MyTestComponent" type="Node" parent="Player"]
+script = ExtResource("3_qdyua")
+
+[node name="MyTestScript" type="Node" parent="Player"]
+script = ExtResource("3_vm8dp")
