@@ -1,11 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=3 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
-[ext_resource type="Script" path="res://src/util/GameObject.cs" id="2_vdd0s"]
 [ext_resource type="PackedScene" uid="uid://bwk3kwpofprgx" path="res://res/prefabs/character.tscn" id="3_2htuu"]
 
 [node name="Entry" type="Node3D"]
-script = ExtResource("2_vdd0s")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_rpbss")

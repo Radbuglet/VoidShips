@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bwk3kwpofprgx"]
 
-[ext_resource type="Script" path="res://src/util/GameObject.cs" id="1_lw6t4"]
 [ext_resource type="Script" path="res://src/actors/character/CharacterMotor.cs" id="2_6wpxx"]
+[ext_resource type="Script" path="res://src/actors/character/CharacterController.cs" id="2_giamo"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ceicc"]
 size = Vector3(1, 2, 1)
@@ -9,13 +9,13 @@ size = Vector3(1, 2, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_b4jh2"]
 size = Vector3(1, 2, 1)
 
-[node name="Character" type="CharacterBody3D"]
-script = ExtResource("1_lw6t4")
-Components = [NodePath("CharacterMotor")]
+[node name="Character" type="CharacterBody3D" groups=["game_object"]]
 
-[node name="CharacterMotor" type="Node" parent="." node_paths=PackedStringArray("Body")]
+[node name="CharacterMotor" type="Node" parent="."]
 script = ExtResource("2_6wpxx")
-Body = NodePath("..")
+
+[node name="CharacterController" type="Node" parent="."]
+script = ExtResource("2_giamo")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
