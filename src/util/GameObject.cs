@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-public partial class GameObject : Node
+public sealed partial class GameObject : Node
 {
 	[Export]
 	public Godot.Collections.Array<NodePath> Components = new();
@@ -85,7 +85,7 @@ public partial class GameObject : Node
 		)
 		{
 			// Ensure that the component is applicable
-			if (!ComponentTy.HasAttr(ty))
+			if (!Util.Component.HasAttr(ty))
 				return;
 
 			foundApplicable = true;
@@ -155,14 +155,14 @@ public partial class GameObject : Node
 
 	// === Querying === //
 
-	public T? TryComponent<T>() where T : Node
+	public T? TryComponent<T>() where T : class
 	{
-		Debug.Assert(ComponentTy.HasAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {this.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(ComponentTy)} attribute.");
+		Debug.Assert(Util.Component.HasAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {this.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(Util.Component)} attribute.");
 
-		return ComponentMap.TryGetValue(typeof(T), out var value) ? (T)value : null;
+		return ComponentMap.TryGetValue(typeof(T), out var value) ? (T)(object)value : null;
 	}
 
-	public T Component<T>() where T : Node
+	public T Component<T>() where T : class
 	{
 		var comp = TryComponent<T>();
 		Debug.Assert(comp != null, $"{this.StringifyNode()} does not have component of type {typeof(T)}.");
@@ -183,11 +183,11 @@ public partial class GameObject : Node
 }
 
 [System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Interface)]
-public sealed class ComponentTy : System.Attribute
+public sealed class Component : System.Attribute
 {
 	internal static bool HasAttr(Type ty)
 	{
-		return System.Attribute.GetCustomAttribute(ty, typeof(ComponentTy)) != null;
+		return System.Attribute.GetCustomAttribute(ty, typeof(Component)) != null;
 	}
 }
 
@@ -215,12 +215,12 @@ public static class GameObjectExt
 		return gObj!;
 	}
 
-	public static T? TryComponent<T>(this Node target) where T : Node
+	public static T? TryComponent<T>(this Node target) where T : class
 	{
 		return target.GameObject().TryComponent<T>();
 	}
 
-	public static T Component<T>(this Node target) where T : Node
+	public static T Component<T>(this Node target) where T : class
 	{
 		return target.GameObject().Component<T>();
 	}
