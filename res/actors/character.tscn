@@ -1,7 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://bwk3kwpofprgx"]
+[gd_scene load_steps=7 format=3 uid="uid://bwk3kwpofprgx"]
 
 [ext_resource type="Script" path="res://src/actors/character/CharacterMotor.cs" id="2_6wpxx"]
 [ext_resource type="Script" path="res://src/actors/character/CharacterController.cs" id="2_giamo"]
+[ext_resource type="Script" path="res://src/actors/character/CameraController.cs" id="3_kwyqf"]
+[ext_resource type="Script" path="res://src/actors/character/DebugHud.cs" id="3_s8xtk"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ceicc"]
 size = Vector3(1, 2, 1)
@@ -16,6 +18,22 @@ script = ExtResource("2_6wpxx")
 
 [node name="CharacterController" type="Node" parent="."]
 script = ExtResource("2_giamo")
+
+[node name="DebugHud" type="RichTextLabel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+bbcode_enabled = true
+text = "Debug HUD"
+scroll_active = false
+script = ExtResource("3_s8xtk")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+script = ExtResource("3_kwyqf")
 
 [node name="Collider" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

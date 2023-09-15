@@ -1,14 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=4 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
-[ext_resource type="PackedScene" uid="uid://bwk3kwpofprgx" path="res://res/prefabs/character.tscn" id="3_2htuu"]
+[ext_resource type="PackedScene" uid="uid://bwk3kwpofprgx" path="res://res/actors/character.tscn" id="3_2htuu"]
+[ext_resource type="PackedScene" uid="uid://xdleeg08e0rj" path="res://res/prefabs/box.tscn" id="4_7mgkq"]
 
 [node name="Entry" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_rpbss")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
-
 [node name="Character" parent="." instance=ExtResource("3_2htuu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 5, 0)
+shadow_enabled = true
+
+[node name="Box" parent="." instance=ExtResource("4_7mgkq")]
+transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, 0, 0)
