@@ -1,10 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=8 format=3 uid="uid://cb642xa7kwqyk"]
 
+[ext_resource type="Script" path="res://src/actors/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
 [ext_resource type="PackedScene" uid="uid://bwk3kwpofprgx" path="res://res/actors/character.tscn" id="3_2htuu"]
 [ext_resource type="PackedScene" uid="uid://xdleeg08e0rj" path="res://res/prefabs/box.tscn" id="4_7mgkq"]
+[ext_resource type="Script" path="res://src/scripts/GameSceneInitializer.cs" id="5_0mkeh"]
+[ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorBase.cs" id="5_3nf6a"]
+[ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
 
-[node name="Entry" type="Node3D"]
+[node name="Entry" type="Node3D" groups=["game_object"]]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = ExtResource("1_rpbss")
@@ -18,3 +22,21 @@ shadow_enabled = true
 
 [node name="Box" parent="." instance=ExtResource("4_7mgkq")]
 transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, 0, 0)
+
+[node name="ItemRegistry" type="Node" parent="."]
+script = ExtResource("1_jgjs8")
+
+[node name="StoneDescriptor" type="Node" parent="ItemRegistry" groups=["game_object"]]
+
+[node name="ItemDescriptorBase" type="Node" parent="ItemRegistry/StoneDescriptor"]
+script = ExtResource("5_3nf6a")
+Id = "stone"
+FriendlyName = "Stoney Wonie"
+
+[node name="ItemDescriptorVisual" type="Node" parent="ItemRegistry/StoneDescriptor"]
+script = ExtResource("6_1sa0c")
+Color = Color(0.270588, 0.321569, 0.333333, 1)
+
+[node name="GameSceneInitializer" type="Node" parent="." node_paths=PackedStringArray("LocalPlayer")]
+script = ExtResource("5_0mkeh")
+LocalPlayer = NodePath("../Character")

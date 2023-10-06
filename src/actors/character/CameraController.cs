@@ -11,13 +11,11 @@ public sealed partial class CameraController : Camera3D
 	public Vector2 Orientation
 	{
 		get => _orientation;
-		set
-		{
+		set =>
 			_orientation = new Vector2(
 				value.X % Mathf.Tau,
 				Mathf.Clamp(value.Y, -Mathf.Pi / 2, Mathf.Pi / 2)
 			);
-		}
 	}
 
 	public Vector3 RotatedHorizontally(Vector3 relative)

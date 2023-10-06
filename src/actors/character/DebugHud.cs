@@ -17,7 +17,7 @@ public sealed partial class DebugHud : RichTextLabel
 
 	private static string FormatVector(Vector3 vec)
 	{
-		var sep = "[color=gray], [/color]";
+		const string sep = "[color=gray], [/color]";
 		return $"[color=red]{vec.X}[/color]{sep}[color=green]{vec.Y}[/color]{sep}[color=blue]{vec.Z}[/color]";
 	}
 }

@@ -10,18 +10,18 @@ public sealed partial class GameObject : RefCounted
 	internal readonly Dictionary<Type, Node> Comps = new();
 }
 
-[System.AttributeUsage(System.AttributeTargets.Class | System.AttributeTargets.Interface)]
-public sealed class Component : System.Attribute
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
+public sealed class Component : Attribute
 {
 	internal static bool HasCompAttr(Type ty)
 	{
-		return System.Attribute.GetCustomAttribute(ty, typeof(Component)) != null;
+		return GetCustomAttribute(ty, typeof(Component)) != null;
 	}
 }
 
 public static class GameObjectExt
 {
-	public const string GameObjectGroup = "game_object";
+	private const string GameObjectGroup = "game_object";
 	private const string CompMapMetaKey = "gobj_comp_map";
 
 	public static bool IsGameObject(this Node target)
@@ -126,5 +126,11 @@ public static class GameObjectExt
 		var comp = target.TryComponent<T>();
 		Debug.Assert(comp != null, $"{target.StringifyNode()} does not have component of type {typeof(T)}.");
 		return comp!;
+	}
+
+	public static T MakeGameObject<T>(this T node) where T : Node 
+	{
+		node.AddToGroup(GameObjectGroup);
+		return node;
 	}
 }

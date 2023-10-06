@@ -46,7 +46,7 @@ public sealed partial class CharacterController : Node
 
 	public override void _Input(InputEvent rawEv)
 	{
-		if (!(rawEv is InputEventMouseMotion ev))
+		if (rawEv is not InputEventMouseMotion ev)
 			return;
 
 		_camera!.Orientation += ev.Relative * (Mathf.Pi / 180f) * -0.1f;
