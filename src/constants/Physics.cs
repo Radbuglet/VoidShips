@@ -14,5 +14,5 @@ public static class GamePhysicsConf
 	public static readonly float PlayerDragCoefGround = 0.05f;
 	public static readonly float PlayerDragCoefAir = 0.06f;
 	public static readonly float PlayerHorizontalAccel = 50f;
-	public static readonly float PlayerJumpImpulse = 40f;
+	public static readonly float PlayerJumpImpulse = 20f;
 }

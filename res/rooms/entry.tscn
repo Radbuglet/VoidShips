@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=9 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/actors/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://src/scripts/GameSceneInitializer.cs" id="5_0mkeh"]
 [ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorBase.cs" id="5_3nf6a"]
 [ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
+[ext_resource type="Script" path="res://src/actors/ship/ShipController.cs" id="7_uvkwj"]
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
 
@@ -21,7 +22,7 @@ transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0
 shadow_enabled = true
 
 [node name="Box" parent="." instance=ExtResource("4_7mgkq")]
-transform = Transform3D(10, 0, 0, 0, 0.1, 0, 0, 0, 10, 0, 0, 0)
+transform = Transform3D(25, 0, 0, 0, 0.25, 0, 0, 0, 25, 0, 0, 0)
 
 [node name="ItemRegistry" type="Node" parent="."]
 script = ExtResource("1_jgjs8")
@@ -36,6 +37,9 @@ FriendlyName = "Stoney Wonie"
 [node name="ItemDescriptorVisual" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("6_1sa0c")
 Color = Color(0.270588, 0.321569, 0.333333, 1)
+
+[node name="ShipController" type="Node" parent="."]
+script = ExtResource("7_uvkwj")
 
 [node name="GameSceneInitializer" type="Node" parent="." node_paths=PackedStringArray("LocalPlayer")]
 script = ExtResource("5_0mkeh")
