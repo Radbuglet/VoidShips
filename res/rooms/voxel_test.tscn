@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://rrkw11cct4f5"]
+
+[ext_resource type="Script" path="res://src/actors/voxel/VoxelMeshManager.cs" id="1_rancb"]
+[ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_wo24r"]
+[ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="3_22adp"]
+
+[node name="VoxelTestScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource("1_wo24r")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.364276, 0.931291, 0, -0.931291, 0.364276, 0, 16, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 45)
+
+[node name="VoxelMeshManager" type="Node" parent="."]
+script = ExtResource("1_rancb")
+MeshMaterial = ExtResource("3_22adp")
