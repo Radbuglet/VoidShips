@@ -8,7 +8,7 @@ public readonly struct VoxelPointer
     public readonly VoxelDataChunk? Cache;
     public readonly Vector3I Pos;
 
-    private VoxelPointer(VoxelDataWorld world, VoxelDataChunk? cache, Vector3I pos)
+    public VoxelPointer(VoxelDataWorld world, VoxelDataChunk? cache, Vector3I pos)
     {
         World = world;
         Cache = cache;
@@ -31,6 +31,11 @@ public readonly struct VoxelPointer
     {
         return new VoxelPointer(World, pos.WorldVecToChunkVec() == Pos.WorldVecToChunkVec() ? Cache : null, pos);
     }
+    
+    public static VoxelPointer operator +(VoxelPointer ptr, Vector3I rel)
+    {
+        return ptr.WithPos(ptr.Pos + rel);
+    }
 
     public VoxelPointer Neighbor(BlockFace face)
     {
@@ -41,12 +46,17 @@ public readonly struct VoxelPointer
         return new VoxelPointer(World, newCache, newPos);
     }
     
-    public VoxelPointer GetChunk()
+    public int GetBlockIndex()
     {
-        return GetChunk(out _);
+        return Pos.WorldVecToBlockVec().BlockPosToIndex();
+    }
+    
+    public VoxelPointer FetchChunk()
+    {
+        return FetchChunk(out _);
     }
 
-    public VoxelPointer GetChunk(out VoxelDataChunk? chunk)
+    public VoxelPointer FetchChunk(out VoxelDataChunk? chunk)
     {
         if (Cache != null)
         {
@@ -57,5 +67,17 @@ public readonly struct VoxelPointer
         var mutated = new VoxelPointer(World, World.GetChunk(Pos.WorldVecToChunkVec()), Pos);
         chunk = mutated.Cache;
         return mutated;
+    }
+
+    public short GetData()
+    {
+        FetchChunk(out var chunk);
+        return chunk?.GetBlockData(GetBlockIndex()) ?? 0;
+    }
+    
+    public void SetData(short data)
+    {
+        FetchChunk(out var chunk);
+        chunk?.SetBlockData(GetBlockIndex(), data);
     }
 }

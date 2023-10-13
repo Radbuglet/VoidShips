@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 
 namespace VoidShips.actors.voxel;
@@ -62,7 +63,6 @@ public static class VoxelMath
     
     // === Voxel Vectors === //
     
-    
     public static Vector3I BlockIndexToPos(int idx)
     {
         return new Vector3I(
@@ -73,6 +73,7 @@ public static class VoxelMath
 
     public static int BlockPosToIndex(this Vector3I pos)
     {
+        Debug.Assert(pos.IsValidBlockPos(), $"{pos} is not a valid block pos");
         return pos.X + pos.Y * ChunkEdgeLength + pos.Z * ChunkEdgeLength * ChunkEdgeLength;
     }
 
@@ -84,9 +85,36 @@ public static class VoxelMath
     public static Vector3I WorldVecToChunkVec(this Vector3I vec)
     {
         return new Vector3I(
-            Math.DivRem(vec.X, ChunkEdgeLength).Quotient,
-            Math.DivRem(vec.Y, ChunkEdgeLength).Quotient,
-            Math.DivRem(vec.Z, ChunkEdgeLength).Quotient);
+            DivEuclid(vec.X, ChunkEdgeLength),
+            DivEuclid(vec.Y, ChunkEdgeLength),
+            DivEuclid(vec.Z, ChunkEdgeLength));
+    }
+    
+    public static Vector3I WorldVecToBlockVec(this Vector3I vec)
+    {
+        return new Vector3I(
+            RemEuclid(vec.X, ChunkEdgeLength),
+            RemEuclid(vec.Y, ChunkEdgeLength),
+            RemEuclid(vec.Z, ChunkEdgeLength));
+    }
+    
+    // === Remainder Stuff === //
+    
+    public static int DivEuclid(this int lhs, int rhs) {
+        var q = lhs / rhs;
+        if (lhs % rhs < 0)
+            return rhs > 0 ? q - 1 : q + 1;
+        
+        return q;
+    }
+
+    public static int RemEuclid(this int lhs, int rhs)
+    {
+        var r = lhs % rhs;
+        if (r < 0)
+            return r + Math.Abs(rhs);
+        
+        return r;
     }
 }
 

@@ -10,6 +10,7 @@ public sealed partial class VoxelDataWorld : Node
     [Signal] public delegate void ChunkAddedEventHandler(VoxelDataChunk chunk);
     
     private readonly Dictionary<Vector3I, VoxelDataChunk> _chunks = new();
+    internal HashSet<VoxelDataChunk> DirtyChunks = new();
 
     public void AddChunk(VoxelDataChunk chunk)
     {
@@ -30,6 +31,7 @@ public sealed partial class VoxelDataWorld : Node
         // Register chunk
         chunk.VoxelWorld = this;
         _chunks.Add(chunk.ChunkPos, chunk);
+        DirtyChunks.Add(chunk);
         EmitSignal(SignalName.ChunkAdded, chunk);
     }
 
@@ -41,5 +43,12 @@ public sealed partial class VoxelDataWorld : Node
     public VoxelPointer GetPointer(Vector3I pos)
     {
         return new VoxelPointer(this, pos);
+    }
+
+    public HashSet<VoxelDataChunk> FlushDirtyChunks()
+    {
+        var oldSet = DirtyChunks;
+        DirtyChunks = new HashSet<VoxelDataChunk>();
+        return oldSet;
     }
 }
