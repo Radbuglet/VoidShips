@@ -14,7 +14,9 @@ public sealed partial class VoxelDemoRunner : Node
         
         // Create main chunk
         var chunkScene = GD.Load<PackedScene>("res://res/actors/voxel_chunk.tscn");
+
         var mainChunk = chunkScene.Instantiate<Node>();
+        mainChunk.Component<VoxelDataChunk>().ChunkPos = new Vector3I(0, -2, 0);
         worldData.AddChunk(mainChunk.Component<VoxelDataChunk>());
         
         // Populate it

@@ -61,7 +61,7 @@ public sealed partial class VoxelMeshChunk : Node
 
                 var mm = _meshes[(int)face].Multimesh;
                 
-                var instanceCenter = ptr.Pos;
+                var instanceCenter = ptr.Pos - chunk.MinWorldPos;
                 if (!face.IsSignNegative())
                     instanceCenter[(int)face.Axis()] += 1;
                 

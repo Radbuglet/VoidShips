@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=13 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/actors/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -7,7 +7,11 @@
 [ext_resource type="Script" path="res://src/scripts/GameSceneInitializer.cs" id="5_0mkeh"]
 [ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorBase.cs" id="5_3nf6a"]
 [ext_resource type="Script" path="res://src/actors/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
+[ext_resource type="Script" path="res://src/actors/voxel/VoxelDataWorld.cs" id="7_haog7"]
 [ext_resource type="Script" path="res://src/actors/ship/ShipController.cs" id="7_uvkwj"]
+[ext_resource type="Script" path="res://src/actors/voxel/VoxelMeshWorld.cs" id="8_clxii"]
+[ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
+[ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
 
@@ -38,9 +42,19 @@ FriendlyName = "Stoney Wonie"
 script = ExtResource("6_1sa0c")
 Color = Color(0.270588, 0.321569, 0.333333, 1)
 
+[node name="VoxelDataWorld" type="Node" parent="."]
+script = ExtResource("7_haog7")
+
+[node name="VoxelMeshWorld" type="Node" parent="."]
+script = ExtResource("8_clxii")
+MeshMaterial = ExtResource("9_0k8ko")
+
 [node name="ShipController" type="Node" parent="."]
 script = ExtResource("7_uvkwj")
 
 [node name="GameSceneInitializer" type="Node" parent="." node_paths=PackedStringArray("LocalPlayer")]
 script = ExtResource("5_0mkeh")
 LocalPlayer = NodePath("../Character")
+
+[node name="VoxelDemoRunner" type="Node" parent="."]
+script = ExtResource("10_hdkvm")

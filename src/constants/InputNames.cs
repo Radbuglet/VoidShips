@@ -9,6 +9,7 @@ public static class GameInputs
 	public static readonly InputActionId FpsRight = new("fps_right");
 	public static readonly InputActionId FpsForward = new("fps_forward");
 	public static readonly InputActionId FpsBackward = new("fps_backward");
+	public static readonly InputActionId FpsEscape = new("fps_escape");
 }
 
 public readonly struct InputActionId

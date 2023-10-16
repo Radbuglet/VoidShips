@@ -11,19 +11,30 @@ public sealed partial class CharacterController : Node
 	private CharacterMotor? _motor;
 	private CameraController? _camera;
 
+	private bool _isAttached;
+
 	public override void _Ready()
 	{
 		_body = this.GameObject<CharacterBody3D>();
 		_motor = this.Component<CharacterMotor>();
 		_camera = this.Component<CameraController>();
-
-		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	public override void _Process(double delta)
 	{
 		var fDelta = (float)delta;
+		
+		// Update attach state
+		if (GameInputs.FpsEscape.JustPressed)
+		{
+			_isAttached = !_isAttached;
+		}
+		
+		Input.MouseMode = _isAttached ? Input.MouseModeEnum.Captured : Input.MouseModeEnum.Visible;
 
+		if (!_isAttached) return;
+
+		// Handle movement
 		if (GameInputs.FpsJump.JustPressed && _motor!.IsOnGround)
 		{
 			var newVel = _body!.Velocity;
@@ -46,6 +57,8 @@ public sealed partial class CharacterController : Node
 
 	public override void _Input(InputEvent rawEv)
 	{
+		if (!_isAttached) return;
+
 		if (rawEv is not InputEventMouseMotion ev)
 			return;
 
