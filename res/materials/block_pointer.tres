@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://cdig6ir5ovuwf"]
+
+[ext_resource type="Texture2D" uid="uid://b42wk4fkmy7u5" path="res://res/textures/block_pointer.png" id="1_kn0i8"]
+
+[resource]
+transparency = 1
+cull_mode = 2
+albedo_texture = ExtResource("1_kn0i8")
+uv1_offset = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+texture_filter = 0
+disable_receive_shadows = true
+grow_amount = 3.33067e-16

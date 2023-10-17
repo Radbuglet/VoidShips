@@ -48,6 +48,9 @@ public sealed partial class VoxelDataWorld : Node
     public HashSet<VoxelDataChunk> FlushDirtyChunks()
     {
         var oldSet = DirtyChunks;
+        foreach (var chunk in oldSet)
+            chunk.IsDirty = false;
+        
         DirtyChunks = new HashSet<VoxelDataChunk>();
         return oldSet;
     }

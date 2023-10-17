@@ -1,3 +1,4 @@
+using System.Linq;
 using VoidShips.actors.voxel;
 
 namespace VoidShips.Actors.Character;
@@ -67,19 +68,19 @@ public sealed partial class CharacterController : Node
 			_camera.GlobalPosition,
 			_camera.GlobalPosition + _camera.Rotated(Vector3.Forward) * 7);
 
-		while (true)
+		while (ray.Distance < ray.MaxDistance)
 		{
 			var collisions = ray.StepRaw();
-			if (ray.Distance >= ray.MaxDistance) break;
 
-			foreach (var collision in collisions)
+			foreach (var collision in collisions.Where(collision => collision.Pointer.GetData() != 0))
 			{
-				if (collision.Pointer.GetData() != 0)
-				{
-					// collision.Pointer.Neighbor(collision.EntryFace.Inverse()).SetData(1);
-					pointer.GlobalPosition = collision.Position;
-					goto end;
-				}
+				if (GameInputs.FpsPlace.JustPressed)
+					collision.Pointer.Neighbor(collision.EntryFace.Inverse()).SetData(1);
+				if (GameInputs.FpsBreak.JustPressed)
+					collision.Pointer.SetData(0);
+				
+				pointer.GlobalPosition = collision.Pointer.Pos + Vector3.One * 0.5f;
+				goto end;
 			}
 		}
 		

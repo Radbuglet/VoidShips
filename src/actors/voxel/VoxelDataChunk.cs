@@ -26,7 +26,7 @@ public sealed partial class VoxelDataChunk : Node
 		}
 	}
 
-	private bool _isDirty;
+	internal bool IsDirty;
 
 	public VoxelDataChunk? Neighbor(BlockFace face)
 	{
@@ -50,9 +50,9 @@ public sealed partial class VoxelDataChunk : Node
 
 	public void SetBlockData(int index, short data)
 	{
-		if (!_isDirty)
+		if (!IsDirty)
 		{
-			_isDirty = true;
+			IsDirty = true;
 			VoxelWorld?.DirtyChunks.Add(this);
 		}
 

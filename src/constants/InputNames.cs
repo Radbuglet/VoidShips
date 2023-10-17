@@ -10,6 +10,8 @@ public static class GameInputs
 	public static readonly InputActionId FpsForward = new("fps_forward");
 	public static readonly InputActionId FpsBackward = new("fps_backward");
 	public static readonly InputActionId FpsEscape = new("fps_escape");
+	public static readonly InputActionId FpsPlace = new("fps_place");
+	public static readonly InputActionId FpsBreak = new("fps_break");
 }
 
 public readonly struct InputActionId
