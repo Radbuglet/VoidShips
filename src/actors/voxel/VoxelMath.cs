@@ -35,6 +35,11 @@ public static class VoxelMath
         new(0, 0, -1)
     };
 
+    public static BlockFace ComposeBlockFace(Axis3 axis3, bool isNegative)
+    {
+        return (BlockFace)((int)axis3 << 1) + (isNegative ? 1 : 0);
+    }
+
     public static Axis3 Axis(this BlockFace face)
     {
         return (Axis3)((int) face / 2);
@@ -62,6 +67,11 @@ public static class VoxelMath
     }
     
     // === Voxel Vectors === //
+
+    public static Vector3I EntityToWorldVec(this Vector3 vec)
+    {
+        return (Vector3I) vec.Floor();
+    }
     
     public static Vector3I BlockIndexToPos(int idx)
     {
@@ -96,6 +106,11 @@ public static class VoxelMath
             RemEuclid(vec.X, ChunkEdgeLength),
             RemEuclid(vec.Y, ChunkEdgeLength),
             RemEuclid(vec.Z, ChunkEdgeLength));
+    }
+
+    public static AaPlane3 BlockFaceOfWorldVec(this Vector3I pos, BlockFace face)
+    {
+        return new AaPlane3(face.Axis(), pos[(int)face.Axis()] + (face.IsSignNegative() ? 0 : 1));
     }
     
     // === Remainder Stuff === //
@@ -133,4 +148,57 @@ public enum BlockFace
     NegY,
     PosZ,
     NegZ
+}
+
+public readonly struct AaPlane3
+{
+    public readonly Axis3 Axis;
+    public readonly float Depth;
+
+    public AaPlane3(Axis3 axis, float depth)
+    {
+        Axis = axis;
+        Depth = depth;
+    }
+
+    public AaPlane3Intersection Intersection(Segment3D segment)
+    {
+        var depthLerp = Mathf.InverseLerp(segment.Start[(int)Axis], segment.End[(int)Axis], Depth);
+        var pos = segment.Lerp(depthLerp);
+
+        return new AaPlane3Intersection(pos, depthLerp);
+    }
+}
+
+public readonly struct Segment3D
+{
+    public readonly Vector3 Start;
+    public readonly Vector3 End;
+
+    public Vector3 Delta => End - Start;
+    public float Length => Delta.Length();
+
+    public Segment3D(Vector3 start, Vector3 end)
+    {
+        Start = start;
+        End = end;
+    }
+
+    public Vector3 Lerp(float weight)
+    {
+        return Start.Lerp(End, weight);
+    }
+}
+
+public readonly struct AaPlane3Intersection
+{
+    public readonly Vector3 Pos;
+    public readonly float Lerp;
+    public bool IsValid => Lerp is >= 0 and <= 1;
+
+    public AaPlane3Intersection(Vector3 pos, float lerp)
+    {
+        Pos = pos;
+        Lerp = lerp;
+    }
 }

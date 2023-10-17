@@ -23,6 +23,11 @@ public sealed partial class CameraController : Camera3D
 		return relative.Rotated(Vector3.Up, Orientation.X);
 	}
 
+	public Vector3 Rotated(Vector3 relative)
+	{
+		return relative.Rotated(Vector3.Right, Orientation.Y).Rotated(Vector3.Up, Orientation.X);
+	}
+
 	public override void _Process(double delta)
 	{
 		Basis = Basis.Identity

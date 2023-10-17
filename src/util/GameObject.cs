@@ -31,8 +31,6 @@ public static class GameObjectExt
 
 	public static T? TryGameObject<T>(this Node target) where T : class
 	{
-		// TODO: Cache this?
-
 		var iter = target;
 
 		while (iter != null)
@@ -44,6 +42,11 @@ public static class GameObjectExt
 		}
 
 		return null;
+	}
+
+	public static T ParentGameObject<T>(this Node target) where T : class
+	{
+		return target.GameObject<Node>().GetParent().GameObject<T>();
 	}
 
 	public static T GameObject<T>(this Node target) where T : class

@@ -1,3 +1,5 @@
+using VoidShips.actors.voxel;
+
 namespace VoidShips.Actors.Character;
 
 using Godot;
@@ -7,6 +9,7 @@ using VoidShips.Constants;
 [Component]
 public sealed partial class CharacterController : Node
 {
+	private VoxelDataWorld? _world;
 	private CharacterBody3D? _body;
 	private CharacterMotor? _motor;
 	private CameraController? _camera;
@@ -15,6 +18,7 @@ public sealed partial class CharacterController : Node
 
 	public override void _Ready()
 	{
+		_world = this.ParentGameObject<Node>().Component<VoxelDataWorld>();
 		_body = this.GameObject<CharacterBody3D>();
 		_motor = this.Component<CharacterMotor>();
 		_camera = this.Component<CameraController>();
@@ -53,6 +57,33 @@ public sealed partial class CharacterController : Node
 
 		_body!.Velocity += _camera!.RotatedHorizontally(
 			heading * GamePhysicsConf.PlayerHorizontalAccel * fDelta);
+
+		// Raycast demo
+		var pointer = GetNode<Node3D>("../Pointer"); 
+		pointer.GlobalPosition = _camera.GlobalPosition + _camera.Rotated(Vector3.Forward) * 7;
+		
+		var ray = new VoxelRaycast(
+			_world!,
+			_camera.GlobalPosition,
+			_camera.GlobalPosition + _camera.Rotated(Vector3.Forward) * 7);
+
+		while (true)
+		{
+			var collisions = ray.StepRaw();
+			if (ray.Distance >= ray.MaxDistance) break;
+
+			foreach (var collision in collisions)
+			{
+				if (collision.Pointer.GetData() != 0)
+				{
+					// collision.Pointer.Neighbor(collision.EntryFace.Inverse()).SetData(1);
+					pointer.GlobalPosition = collision.Position;
+					goto end;
+				}
+			}
+		}
+		
+		end: {}
 	}
 
 	public override void _Input(InputEvent rawEv)
