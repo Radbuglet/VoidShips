@@ -1,6 +1,6 @@
 using Godot;
 
-namespace VoidShips.actors.voxel;
+namespace VoidShips.game.voxel;
 
 public readonly struct VoxelPointer
 {

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Godot;
-using VoidShips.Actors.Inventory.descriptor;
+using VoidShips.game.inventory.descriptor;
 using VoidShips.Util;
 
-namespace VoidShips.Actors.Inventory;
+namespace VoidShips.game.inventory;
 
 [Component]
 public sealed partial class ItemRegistry : Node

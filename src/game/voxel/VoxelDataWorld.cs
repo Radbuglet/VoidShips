@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Godot;
 using VoidShips.Util;
 
-namespace VoidShips.actors.voxel;
+namespace VoidShips.game.voxel;
 
 [Component]
 public sealed partial class VoxelDataWorld : Node

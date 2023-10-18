@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://bg72uoyxm4qyj"]
 
-[ext_resource type="Script" path="res://src/actors/voxel/VoxelDataChunk.cs" id="1_upn5d"]
-[ext_resource type="Script" path="res://src/actors/voxel/VoxelMeshChunk.cs" id="2_hnmdb"]
+[ext_resource type="Script" path="res://src/game/voxel/VoxelDataChunk.cs" id="1_upn5d"]
+[ext_resource type="Script" path="res://src/game/voxel/VoxelMeshChunk.cs" id="2_hnmdb"]
 
 [node name="VoxelChunk" type="StaticBody3D" groups=["game_object"]]
 

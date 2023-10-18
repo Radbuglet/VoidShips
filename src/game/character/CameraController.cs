@@ -1,7 +1,7 @@
-namespace VoidShips.Actors.Character;
-
 using Godot;
 using VoidShips.Util;
+
+namespace VoidShips.game.character;
 
 [Component]
 public sealed partial class CameraController : Camera3D

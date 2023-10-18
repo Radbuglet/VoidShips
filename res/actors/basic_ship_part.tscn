@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://bo3ua2m17nivv"]
 
-[ext_resource type="Script" path="res://src/actors/ship/ShipPart.cs" id="1_bkk44"]
+[ext_resource type="Script" path="res://src/game/ship/ShipPart.cs" id="1_bkk44"]
 [ext_resource type="PackedScene" uid="uid://xdleeg08e0rj" path="res://res/prefabs/box.tscn" id="1_vlseh"]
-[ext_resource type="Script" path="res://src/actors/ship/ShipPartClient.cs" id="2_r2t0k"]
+[ext_resource type="Script" path="res://src/game/ship/ShipPartClient.cs" id="2_r2t0k"]
 
 [node name="BaseShipPart" type="Node3D" groups=["game_object"]]
 

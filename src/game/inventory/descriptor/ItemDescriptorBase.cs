@@ -1,7 +1,7 @@
 using Godot;
 using VoidShips.Util;
 
-namespace VoidShips.Actors.Inventory.descriptor;
+namespace VoidShips.game.inventory.descriptor;
 
 [Component]
 public sealed partial class ItemDescriptorBase : Node

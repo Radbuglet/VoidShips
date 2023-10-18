@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 
-namespace VoidShips.actors.voxel;
+namespace VoidShips.game.voxel;
 
 public static class VoxelMath
 {

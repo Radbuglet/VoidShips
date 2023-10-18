@@ -1,7 +1,7 @@
 using Godot;
 using VoidShips.Util;
 
-namespace VoidShips.Actors.Inventory;
+namespace VoidShips.game.inventory;
 
 [Component]
 public sealed partial class ItemStackBase : Node

@@ -1,6 +1,9 @@
 using Godot;
-using VoidShips.actors.voxel;
+using VoidShips.game.voxel;
 using VoidShips.Util;
+using VoxelDataChunk = VoidShips.game.voxel.VoxelDataChunk;
+using VoxelDataWorld = VoidShips.game.voxel.VoxelDataWorld;
+using VoxelMeshWorld = VoidShips.game.voxel.VoxelMeshWorld;
 
 namespace VoidShips.scripts;
 

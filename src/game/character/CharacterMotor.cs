@@ -1,8 +1,8 @@
-namespace VoidShips.Actors.Character;
-
 using Godot;
-using VoidShips.Util;
 using VoidShips.Constants;
+using VoidShips.Util;
+
+namespace VoidShips.game.character;
 
 [Component]
 public sealed partial class CharacterMotor : Node

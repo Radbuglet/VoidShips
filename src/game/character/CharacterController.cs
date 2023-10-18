@@ -1,11 +1,10 @@
 using System.Linq;
-using VoidShips.actors.voxel;
-
-namespace VoidShips.Actors.Character;
-
 using Godot;
-using VoidShips.Util;
 using VoidShips.Constants;
+using VoidShips.game.voxel;
+using VoidShips.Util;
+
+namespace VoidShips.game.character;
 
 [Component]
 public sealed partial class CharacterController : Node

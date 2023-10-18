@@ -1,7 +1,7 @@
 using Godot;
 using VoidShips.Util;
 
-namespace VoidShips.actors.ship;
+namespace VoidShips.game.ship;
 
 [Component]
 public sealed partial class ShipPart : Node

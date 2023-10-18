@@ -1,6 +1,6 @@
 using Godot;
-using VoidShips.Actors.Inventory;
-using VoidShips.actors.ship;
+using VoidShips.game.inventory;
+using VoidShips.game.ship;
 using VoidShips.Util;
 
 namespace VoidShips.scripts;

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using VoidShips.actors.voxel;
+using VoidShips.game.voxel;
 using VoidShips.Util;
 
-namespace VoidShips.actors.ship;
+namespace VoidShips.game.ship;
 
 [Component]
 public sealed partial class ShipController : Node
