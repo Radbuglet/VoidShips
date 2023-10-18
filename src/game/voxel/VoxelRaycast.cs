@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
+using VoidShips.game.voxel.math;
+using Axis3 = VoidShips.game.voxel.math.Axis3;
+using BlockFace = VoidShips.game.voxel.math.BlockFace;
+using Segment3D = VoidShips.game.voxel.math.Segment3D;
 
-namespace VoidShips.game.voxel.math;
+namespace VoidShips.game.voxel;
 
 public sealed class VoxelRaycast
 {
@@ -16,7 +20,7 @@ public sealed class VoxelRaycast
     public VoxelRaycast(VoxelDataWorld world, Vector3 start, Vector3 end)
     {
         Position = start;
-        CurrentBlock = world.GetPointer(start.EntityToWorldVec());
+        CurrentBlock = world.GetPointer(VoxelCoords.EntityToWorldVec(start));
 
         var delta = end - start;
         Distance = 0;
@@ -40,10 +44,10 @@ public sealed class VoxelRaycast
             // Determine the face into which we traveled.
             var delta = blockDelta[axis];
             if (delta == 0) continue;
-            var face = VoxelMath.ComposeBlockFace((Axis3) axis, delta < 0);
+            var face = BlockFaceExt.Compose((Axis3) axis, delta.GetSignBiased());
             
             // Determine the position of the intersection.
-            var plane = CurrentBlock.Pos.BlockPlaneOfWorldVec(face);
+            var plane = CurrentBlock.Pos.WorldVecToFacePlane(face);
             var intersection = plane.Intersection(stepSegment);
             Debug.Assert(intersection.IsValid);
             
@@ -66,7 +70,7 @@ public sealed class VoxelRaycast
         // And update their block pointers.
         for (var i = 0; i < intersections.Count; i++)
         {
-            CurrentBlock = CurrentBlock.Neighbor(intersections[i].EntryFace);
+            CurrentBlock = CurrentBlock.Neighbor((math.BlockFace) intersections[i].EntryFace);
             intersections[i] = intersections[i] with
             {
                 Pointer = CurrentBlock,

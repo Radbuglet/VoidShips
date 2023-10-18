@@ -67,11 +67,11 @@ public sealed partial class CharacterController : Node
 			_world!,
 			_camera.GlobalPosition,
 			_camera.GlobalPosition + _camera.Rotated(Vector3.Forward) * 7);
-
+		
 		while (ray.Distance < ray.MaxDistance)
 		{
 			var collisions = ray.StepRaw();
-
+		
 			foreach (var collision in collisions.Where(collision => collision.Pointer.GetData() != 0))
 			{
 				if (GameInputs.FpsPlace.JustPressed)

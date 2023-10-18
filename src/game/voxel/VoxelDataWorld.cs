@@ -21,9 +21,9 @@ public sealed partial class VoxelDataWorld : Node
         AddChild(chunkObj);
         
         // Update neighbors
-        foreach (var face in VoxelMath.BlockFaces())
+        foreach (var face in BlockFaceExt.BlockFaces())
         {
-            _chunks.TryGetValue(chunk.ChunkPos + face.UnitVector(), out var neighbor);
+            _chunks.TryGetValue(chunk.ChunkPos + face.UnitVectorI(), out var neighbor);
             chunk.Neighbors[(int)face] = neighbor;
             if (neighbor != null)
                 neighbor.Neighbors[(int)face.Inverse()] = chunk;

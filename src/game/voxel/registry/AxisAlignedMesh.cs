@@ -7,5 +7,5 @@ namespace VoidShips.game.voxel.registry;
 
 public sealed partial class AxisAlignedMesh : Node
 {
-    private readonly List<(AaPlane3, Node)>[] _planes = ArrayUtil.InitArray(VoxelMath.BlockFaceCount, () => new List<(AaPlane3, Node)>());
+    private readonly List<(AaPlane3, Node)>[] _planes = ArrayUtil.InitArray(BlockFaceExt.VariantCount, () => new List<(AaPlane3, Node)>());
 }

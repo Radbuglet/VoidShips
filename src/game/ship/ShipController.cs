@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using VoidShips.game.voxel;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
 
@@ -22,8 +21,8 @@ public sealed partial class ShipController : Node
 
         partData.EmitSignal(nameof(ShipPart.SignalName.Attached), pos);
         
-        foreach (var rel in VoxelMath.FacesVectorsI)
-            GetPart(pos + rel)?.Component<ShipPart>().EmitSignal(nameof(ShipPart.SignalName.NeighborModified));
+        foreach (var face in BlockFaceExt.BlockFaces())
+            GetPart(pos + face.UnitVectorI())?.Component<ShipPart>().EmitSignal(nameof(ShipPart.SignalName.NeighborModified));
     }
 
     public Node? GetPart(Vector3I pos)

@@ -8,10 +8,10 @@ namespace VoidShips.game.voxel;
 [Component]
 public sealed partial class VoxelDataChunk : Node
 {
-	internal VoxelDataChunk?[] Neighbors = new VoxelDataChunk[VoxelMath.ChunkVolume]; 
+	internal VoxelDataChunk?[] Neighbors = new VoxelDataChunk[VoxelCoords.ChunkVolume]; 
 	
 	public VoxelDataWorld? VoxelWorld { get; internal set; }
-	private readonly short[] _rawBlockData = new short[VoxelMath.ChunkVolume];
+	private readonly short[] _rawBlockData = new short[VoxelCoords.ChunkVolume];
 
 	private Vector3I _chunkPos;
 	public Vector3I MinWorldPos { get; private set; }
@@ -22,7 +22,7 @@ public sealed partial class VoxelDataChunk : Node
 		{
 			Debug.Assert(VoxelWorld == null);
 			_chunkPos = value;
-			MinWorldPos = ChunkPos * VoxelMath.ChunkEdgeLength;
+			MinWorldPos = ChunkPos * VoxelCoords.ChunkEdge;
 			this.GameObject<Node3D>().Transform = Transform3D.Identity.Translated(MinWorldPos);
 		}
 	}
@@ -41,7 +41,7 @@ public sealed partial class VoxelDataChunk : Node
 	
 	public VoxelPointer GetPointer(int index)
 	{
-		return new VoxelPointer(VoxelWorld!, this, MinWorldPos + VoxelMath.BlockIndexToPos(index));
+		return new VoxelPointer(VoxelWorld!, this, MinWorldPos + VoxelCoords.BlockVecFromIndex(index));
 	}
 
 	public short GetBlockData(int index)

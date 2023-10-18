@@ -2,9 +2,6 @@ using Godot;
 using VoidShips.game.voxel;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
-using VoxelDataChunk = VoidShips.game.voxel.VoxelDataChunk;
-using VoxelDataWorld = VoidShips.game.voxel.VoxelDataWorld;
-using VoxelMeshWorld = VoidShips.game.voxel.VoxelMeshWorld;
 
 namespace VoidShips.scripts;
 
@@ -29,7 +26,7 @@ public sealed partial class VoxelDemoRunner : Node
         // Populate it
         var rng = new RandomNumberGenerator();
 
-        for (var i = 0; i < VoxelMath.ChunkVolume; i++)
+        for (var i = 0; i < VoxelCoords.ChunkVolume; i++)
         {
             var material = rng.RandiRange(0, 5) == 0 ? rng.RandiRange(1, 5) : 0;
             mainChunk.Component<VoxelDataChunk>().GetPointer(i).SetData((short)material);

@@ -14,7 +14,7 @@ public sealed partial class VoxelMeshChunk : Node
     {
         if (_meshes == null)
         {
-            _meshes = new MultiMeshInstance3D[VoxelMath.BlockFaceCount];
+            _meshes = new MultiMeshInstance3D[BlockFaceExt.VariantCount];
             for (var i = 0; i < _meshes.Length; i++)
                 _meshes[i] = new MultiMeshInstance3D();
             
@@ -49,13 +49,13 @@ public sealed partial class VoxelMeshChunk : Node
         
         var chunk = this.Component<VoxelDataChunk>();
         
-        for (var i = 0; i < VoxelMath.ChunkVolume; i++)
+        for (var i = 0; i < VoxelCoords.ChunkVolume; i++)
         {
             var ptr = chunk.GetPointer(i);
             var mainData = ptr.GetData();
             if (mainData == 0) continue;
 
-            foreach (var face in VoxelMath.BlockFaces())
+            foreach (var face in BlockFaceExt.BlockFaces())
             {
                 var neighborPos = ptr.Neighbor(face);
                 if (neighborPos.GetData() != 0) continue;
