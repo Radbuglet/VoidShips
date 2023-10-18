@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 
-namespace VoidShips.game.voxel;
+namespace VoidShips.game.voxel.math;
 
 public static class VoxelMath
 {
@@ -65,6 +65,39 @@ public static class VoxelMath
     {
         return FacesVectorsI[(int) face];
     }
+
+    public static (Axis3, Axis3) Ortho(this Axis3 axis)
+    {
+        return axis switch
+        {
+            Axis3.X => (Axis3.Z, Axis3.Y),
+            Axis3.Y => (Axis3.X, Axis3.Z),
+            _ => (Axis3.X, Axis3.Z)
+        };
+    }
+
+    public static Vector2 FlattenOrtho(this Vector3 vec, Axis3 flatten)
+    {
+        var (a, b) = flatten.Ortho();
+        return new Vector2(vec[(int)a], vec[(int)b]);
+    }
+    
+    // === Aabb === //
+
+    public static Rect2 RectFromCorners(Vector2 min, Vector2 max)
+    {
+        return new Rect2(min, max - min);
+    }
+
+    public static AaQuad3 QuadOnAabb(this Aabb aabb, BlockFace face)
+    {
+        var axis = face.Axis();
+        var isNegative = face.IsSignNegative();
+
+        return new AaQuad3(
+            new AaPlane3(axis, isNegative ? aabb.Position[(int)axis] : aabb.End[(int) axis]),
+            RectFromCorners(aabb.Position.FlattenOrtho(axis), aabb.End.FlattenOrtho(axis)));
+    }
     
     // === Voxel Vectors === //
 
@@ -108,7 +141,7 @@ public static class VoxelMath
             RemEuclid(vec.Z, ChunkEdgeLength));
     }
 
-    public static AaPlane3 BlockFaceOfWorldVec(this Vector3I pos, BlockFace face)
+    public static AaPlane3 BlockPlaneOfWorldVec(this Vector3I pos, BlockFace face)
     {
         return new AaPlane3(face.Axis(), pos[(int)face.Axis()] + (face.IsSignNegative() ? 0 : 1));
     }
@@ -161,12 +194,46 @@ public readonly struct AaPlane3
         Depth = depth;
     }
 
-    public AaPlane3Intersection Intersection(Segment3D segment)
+    public AaIntersection Intersection(Segment3D segment)
     {
         var depthLerp = Mathf.InverseLerp(segment.Start[(int)Axis], segment.End[(int)Axis], Depth);
         var pos = segment.Lerp(depthLerp);
 
-        return new AaPlane3Intersection(pos, depthLerp);
+        return new AaIntersection(pos, depthLerp);
+    }
+}
+
+public readonly struct AaQuad3
+{
+    public readonly AaPlane3 Plane;
+    public readonly Rect2 Rect;
+
+    public Axis3 Axis => Plane.Axis;
+    public float Depth => Plane.Depth;
+
+    public AaQuad3(AaPlane3 plane, Rect2 rect)
+    {
+        Plane = plane;
+        Rect = rect;
+    }
+
+    public AaIntersection? Intersection(Segment3D segment)
+    {
+        var intersection = Plane.Intersection(segment);
+        return Rect.HasPoint(intersection.Pos.FlattenOrtho(Axis)) ? intersection : null;
+    }
+}
+
+public readonly struct AaIntersection
+{
+    public readonly Vector3 Pos;
+    public readonly float Lerp;
+    public bool IsValid => Lerp is >= 0 and <= 1;
+
+    public AaIntersection(Vector3 pos, float lerp)
+    {
+        Pos = pos;
+        Lerp = lerp;
     }
 }
 
@@ -190,15 +257,3 @@ public readonly struct Segment3D
     }
 }
 
-public readonly struct AaPlane3Intersection
-{
-    public readonly Vector3 Pos;
-    public readonly float Lerp;
-    public bool IsValid => Lerp is >= 0 and <= 1;
-
-    public AaPlane3Intersection(Vector3 pos, float lerp)
-    {
-        Pos = pos;
-        Lerp = lerp;
-    }
-}

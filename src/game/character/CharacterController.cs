@@ -2,6 +2,7 @@ using System.Linq;
 using Godot;
 using VoidShips.Constants;
 using VoidShips.game.voxel;
+using VoidShips.game.voxel.math;
 using VoidShips.Util;
 
 namespace VoidShips.game.character;

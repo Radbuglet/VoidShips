@@ -1,13 +1,12 @@
 using Godot;
+using VoidShips.game.registry;
 using VoidShips.Util;
 
 namespace VoidShips.game.inventory.descriptor;
 
 [Component]
-public sealed partial class ItemDescriptorBase : Node
+public sealed partial class ItemDescriptorBase : AbstractBaseDescriptor
 {
-    [Export] public string? Id;
-    [Export] public string? FriendlyName;
     [Export] public int MaxAutomaticStacking;
 
     public Node BuildDefault()

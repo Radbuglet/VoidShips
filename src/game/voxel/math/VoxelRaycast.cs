@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 
-namespace VoidShips.game.voxel;
+namespace VoidShips.game.voxel.math;
 
 public sealed class VoxelRaycast
 {
@@ -43,7 +43,7 @@ public sealed class VoxelRaycast
             var face = VoxelMath.ComposeBlockFace((Axis3) axis, delta < 0);
             
             // Determine the position of the intersection.
-            var plane = CurrentBlock.Pos.BlockFaceOfWorldVec(face);
+            var plane = CurrentBlock.Pos.BlockPlaneOfWorldVec(face);
             var intersection = plane.Intersection(stepSegment);
             Debug.Assert(intersection.IsValid);
             

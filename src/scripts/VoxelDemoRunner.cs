@@ -1,5 +1,6 @@
 using Godot;
 using VoidShips.game.voxel;
+using VoidShips.game.voxel.math;
 using VoidShips.Util;
 using VoxelDataChunk = VoidShips.game.voxel.VoxelDataChunk;
 using VoxelDataWorld = VoidShips.game.voxel.VoxelDataWorld;

@@ -1,34 +1,20 @@
-namespace VoidShips.Util;
-
 using System;
-using System.Collections.Generic;
+
+namespace VoidShips.Util;
 
 public static class ArrayUtil
 {
-	public static void FilterNonReentrant<T>(this IList<T> target, Func<int, T, bool> shouldRemain)
-	{
-		var writeCursor = 0;
-
-		for (var readCursor = 0; readCursor < target.Count; readCursor++)
-		{
-			var readValue = target[readCursor];
-			if (shouldRemain(readCursor, readValue))
-				target[writeCursor++] = readValue;
-		}
-
-		target.Truncate(writeCursor);
-	}
-
-	public static void Truncate<T>(this IList<T> target, int newLen)
-	{
-		while (target.Count > newLen)
-		{
-			target.Pop();
-		}
-	}
-
-	public static void Pop<T>(this IList<T> target)
-	{
-		target.RemoveAt(target.Count - 1);
-	}
+    public static T[] InitArray<T>(int len, Func<int, T> generator)
+    {
+        var arr = new T[len];
+        for (var i = 0; i < len; i++)
+            arr[i] = generator(i);
+        return arr;
+    }
+    
+    public static T[] InitArray<T>(int len, Func<T> generator)
+    {
+        return InitArray(len, _ => generator());
+    }
 }
+

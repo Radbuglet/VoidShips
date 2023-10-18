@@ -1,5 +1,6 @@
 using System.Linq;
 using Godot;
+using VoidShips.game.voxel.math;
 using VoidShips.Util;
 
 namespace VoidShips.game.voxel;
