@@ -20,7 +20,7 @@ public sealed class VoxelRaycast
     public VoxelRaycast(VoxelDataWorld world, Vector3 start, Vector3 end)
     {
         Position = start;
-        CurrentBlock = world.GetPointer(VoxelCoords.EntityToWorldVec(start));
+        CurrentBlock = world.GetPointer(start.EntityVecToWorldVec());
 
         var delta = end - start;
         Distance = 0;
@@ -35,7 +35,7 @@ public sealed class VoxelRaycast
         
         // Update the position and figure out where we moved to.
         Position += StepDelta;
-        var newBlock = CurrentBlock.WithPos(Position.EntityToWorldVec());
+        var newBlock = CurrentBlock.WithPos(Position.EntityVecToWorldVec());
         var blockDelta = newBlock.Pos - CurrentBlock.Pos;
         
         // Find all our intersections
@@ -44,7 +44,7 @@ public sealed class VoxelRaycast
             // Determine the face into which we traveled.
             var delta = blockDelta[axis];
             if (delta == 0) continue;
-            var face = BlockFaceExt.Compose((Axis3) axis, delta.GetSignBiased());
+            var face = BlockFaceExt.Compose((Axis3) axis, delta.BiasedSign());
             
             // Determine the position of the intersection.
             var plane = CurrentBlock.Pos.WorldVecToFacePlane(face);

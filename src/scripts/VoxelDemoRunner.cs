@@ -26,7 +26,7 @@ public sealed partial class VoxelDemoRunner : Node
         // Populate it
         var rng = new RandomNumberGenerator();
 
-        for (var i = 0; i < VoxelCoords.ChunkVolume; i++)
+        for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
         {
             var material = rng.RandiRange(0, 5) == 0 ? rng.RandiRange(1, 5) : 0;
             mainChunk.Component<VoxelDataChunk>().GetPointer(i).SetData((short)material);

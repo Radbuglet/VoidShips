@@ -49,7 +49,7 @@ public sealed partial class VoxelMeshChunk : Node
         
         var chunk = this.Component<VoxelDataChunk>();
         
-        for (var i = 0; i < VoxelCoords.ChunkVolume; i++)
+        for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
         {
             var ptr = chunk.GetPointer(i);
             var mainData = ptr.GetData();

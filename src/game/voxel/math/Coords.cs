@@ -4,88 +4,93 @@ using Godot;
 
 namespace VoidShips.game.voxel.math;
 
-public static class VoxelCoords
+public static class VoxelCoordsExt
 {
     public const int ChunkEdge = 16;
     public const int ChunkLayer = ChunkEdge * ChunkEdge;
     public const int ChunkVolume = ChunkLayer * ChunkEdge;
-    
-    // === EntityVec === //
-    
-    public static Vector3I EntityToWorldVec(this Vector3 entityVec)
+}
+
+public static class EntityVecExt
+{
+    public static Vector3I EntityVecToWorldVec(this Vector3 entityVec)
     {
-        return (Vector3I) entityVec.Floor();
+        return (Vector3I)entityVec.Floor();
+    }
+}
+
+public static class WorldVecExt
+{
+    public static Vector3I Compose(Vector3I chunkVec, Vector3I blockVec)
+    {
+        return chunkVec + blockVec * VoxelCoordsExt.ChunkEdge;
     }
 
-    // === WorldVec === //
-
-    public static Vector3I WorldVecFromParts(Vector3I chunkVec, Vector3I blockVec)
-    {
-        return chunkVec + blockVec * ChunkEdge;
-    }
-
-    public static Vector3I WorldToChunkVec(this Vector3I worldVec)
-    {
-        return new Vector3I(
-            worldVec.X.DivEuclid(ChunkEdge),
-            worldVec.Y.DivEuclid(ChunkEdge),
-            worldVec.Z.DivEuclid(ChunkEdge));
-    }
-    
-    public static Vector3I WorldToBlockVec(this Vector3I worldVec)
+    public static Vector3I WorldVecToChunkVec(this Vector3I worldVec)
     {
         return new Vector3I(
-            worldVec.X.RemEuclid(ChunkEdge),
-            worldVec.Y.RemEuclid(ChunkEdge),
-            worldVec.Z.RemEuclid(ChunkEdge));
+            worldVec.X.DivEuclid(VoxelCoordsExt.ChunkEdge),
+            worldVec.Y.DivEuclid(VoxelCoordsExt.ChunkEdge),
+            worldVec.Z.DivEuclid(VoxelCoordsExt.ChunkEdge));
     }
 
-    public static Vector3 WorldToNegativeCornerVec(this Vector3I worldVec)
+    public static Vector3I WorldVecToBlockVec(this Vector3I worldVec)
+    {
+        return new Vector3I(
+            worldVec.X.RemEuclid(VoxelCoordsExt.ChunkEdge),
+            worldVec.Y.RemEuclid(VoxelCoordsExt.ChunkEdge),
+            worldVec.Z.RemEuclid(VoxelCoordsExt.ChunkEdge));
+    }
+
+    public static Vector3 WorldVecToNegativeCorner(this Vector3I worldVec)
     {
         return worldVec;
     }
-    
+
     public static AaPlane3 WorldVecToFacePlane(this Vector3I worldVec, BlockFace face)
     {
-        return new AaPlane3(worldVec[(int)face.Axis()] + (face.IsSignNegative() ? 0 : 1), face);        
+        return new AaPlane3(worldVec[(int)face.Axis()] + (face.IsSignNegative() ? 0 : 1), face);
     }
-    
-    // === BlockVec === //
+}
 
+public static class BlockVecExt
+{
     public static bool BlockVecIsValid(this Vector3I blockVec)
     {
-        return blockVec.X is >= 0 and < ChunkEdge && blockVec.Y is >= 0 and < ChunkEdge && blockVec.Z is >= 0 and < ChunkEdge;
+        return blockVec.X is >= 0 and < VoxelCoordsExt.ChunkEdge &&
+               blockVec.Y is >= 0 and < VoxelCoordsExt.ChunkEdge &&
+               blockVec.Z is >= 0 and < VoxelCoordsExt.ChunkEdge;
     }
 
     public static IEnumerable<(int, Vector3I)> BlockVecIter()
     {
-        for (var i = 0; i < ChunkVolume; i++)
+        for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
         {
-            yield return (i, BlockVecFromIndex(i));
+            yield return (i, BlockIndexToVec(i));
         }
     }
 
     public static int BlockVecToIndex(this Vector3I blockVec)
     {
         Debug.Assert(blockVec.BlockVecIsValid());
-        return blockVec.X + blockVec.Y * ChunkEdge + blockVec.Z * ChunkLayer;
+        return blockVec.X + blockVec.Y * VoxelCoordsExt.ChunkEdge + blockVec.Z * VoxelCoordsExt.ChunkLayer;
     }
     
     public static Vector3I? TryBlockVecFromIndex(int index)
     {
-        return BlockIsValidIndex(index) ? BlockVecFromIndex(index) : null;
+        return BlockIndexIsValid(index) ? BlockIndexToVec(index) : null;
     }
 
-    public static Vector3I BlockVecFromIndex(int index)
+    public static Vector3I BlockIndexToVec(this int index)
     {
         return new Vector3I(
-            index % ChunkEdge, 
-            index / ChunkEdge % ChunkEdge,
-            index / ChunkLayer);
+            index % VoxelCoordsExt.ChunkEdge, 
+            index / VoxelCoordsExt.ChunkEdge % VoxelCoordsExt.ChunkEdge,
+            index / VoxelCoordsExt.ChunkLayer);
     }
 
-    public static bool BlockIsValidIndex(int index)
+    public static bool BlockIndexIsValid(int index)
     {
-        return index is >= 0 and < ChunkVolume;
+        return index is >= 0 and < VoxelCoordsExt.ChunkVolume;
     }
 }

@@ -41,22 +41,32 @@ public static class SignExt
         return sign == Sign.Negative;
     }
     
-    public static Sign? GetSign(this int value)
+    public static Sign? CheckedSign(this int value)
     {
         return value == 0 ? null : value < 0 ? Sign.Negative : Sign.Positive;
     }
     
-    public static Sign? GetSign(this double value)
+    public static Sign? CheckedSign(this float value)
     {
         return value == 0 ? null : value < 0 ? Sign.Negative : Sign.Positive;
     }
     
-    public static Sign GetSignBiased(this int value)
+    public static Sign? CheckedSign(this double value)
+    {
+        return value == 0 ? null : value < 0 ? Sign.Negative : Sign.Positive;
+    }
+    
+    public static Sign BiasedSign(this int value)
     {
         return value < 0 ? Sign.Negative : Sign.Positive;
     }
     
-    public static Sign GetSignBiased(this double value)
+    public static Sign BiasedSign(this float value)
+    {
+        return value < 0 ? Sign.Negative : Sign.Positive;
+    }
+    
+    public static Sign BiasedSign(this double value)
     {
         return value < 0 ? Sign.Negative : Sign.Positive;
     }
@@ -64,6 +74,11 @@ public static class SignExt
     public static Sign Flip(this Sign sign)
     {
         return sign.IsNegative() ? Sign.Positive : Sign.Negative;
+    }
+    
+    public static Sign Multiply(this Sign sign, Sign other)
+    {
+        return (Sign)((int)sign ^ (int)other);
     }
 
     public static short AsUnitShort(this Sign sign)
@@ -278,9 +293,19 @@ public static class BlockFaceExt
         return target;
     }
     
-    public static Vector2 FlattenHv(this Vector3 vec, Axis3 flatten)
+    public static Vector2 FlattenHv(this Vector3 vec, Axis3 axisToFlatten)
     {
-        var (h, v) = flatten.OrthoHv();
+        var (h, v) = axisToFlatten.OrthoHv();
         return new Vector2(vec[(int)h], vec[(int)v]);
+    }
+
+    public static Vector3 Deepen(this Vector2 flat, Axis3 axisToDeepen, float depth)
+    {
+        var (h, v) = axisToDeepen.OrthoHv();
+        var target = Vector3.Zero;
+        target[(int)h] = flat.X;
+        target[(int)v] = flat.Y;
+        target[(int)axisToDeepen] = depth;
+        return target;
     }
 }
