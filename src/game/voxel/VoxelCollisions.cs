@@ -48,20 +48,24 @@ public static class VoxelCollisionCheckerExt
             var blockMesh = facade.GetBlock(block).CollisionMesh;
 
             // For every occluder produced by that block...
-            foreach (var (occluderQuad, meta) in blockMesh.PlanesFacing(quad.Normal.Inverse()))
+            foreach (var (relOccluderQuad, meta) in blockMesh.PlanesFacing(quad.Normal.Inverse()))
             {
+                // Transform the quad into the appropriate space
+                var absOccluderQuad = relOccluderQuad.Offset(blockPos.WorldVecToNegativeCorner());
+                
                 // Filter occluders by whether we are affected by them.
                 if (filter != null && !filter(block, meta)) {
                     continue;
                 }
 
-                if (!occluderQuad.Rect.Intersection(quad.Rect).HasArea())
+                if (!absOccluderQuad.Rect.Intersection(quad.Rect).HasArea())
                 {
+                    GD.Print("Ignored!");
                     continue;
                 }
                 
                 // Find its depth along the axis of movement
-                var myDepth = occluderQuad.Origin;
+                var myDepth = absOccluderQuad.Origin;
 
                 // And compare that to the starting depth to find the maximum allowable distance.
                 var relDepth = Math.Abs(myDepth - quad.Origin);

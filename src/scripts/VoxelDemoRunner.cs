@@ -28,8 +28,7 @@ public sealed partial class VoxelDemoRunner : Node
 
         for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
         {
-            var material = rng.RandiRange(0, 5) == 0 ? rng.RandiRange(1, 5) : 0;
-            mainChunk.Component<VoxelDataChunk>().GetPointer(i).SetData((short)material);
+            mainChunk.Component<VoxelDataChunk>().GetPointer(i).SetData(1);
         }
     }
 

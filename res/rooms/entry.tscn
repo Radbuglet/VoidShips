@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
 [ext_resource type="PackedScene" uid="uid://bwk3kwpofprgx" path="res://res/actors/character.tscn" id="3_2htuu"]
-[ext_resource type="PackedScene" uid="uid://xdleeg08e0rj" path="res://res/prefabs/box.tscn" id="4_7mgkq"]
 [ext_resource type="Script" path="res://src/scripts/GameSceneInitializer.cs" id="5_0mkeh"]
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorBase.cs" id="5_3nf6a"]
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
@@ -14,6 +13,7 @@
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
+[ext_resource type="Script" path="res://src/game/voxel/VoxelWorldFacade.cs" id="12_1ygdg"]
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
 
@@ -21,14 +21,11 @@
 environment = ExtResource("1_rpbss")
 
 [node name="Character" parent="." instance=ExtResource("3_2htuu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 30, 6)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 5, 0)
 shadow_enabled = true
-
-[node name="Box" parent="." instance=ExtResource("4_7mgkq")]
-transform = Transform3D(25, 0, 0, 0, 0.25, 0, 0, 0, 25, 2.08165e-12, -0.125, 2.08165e-12)
 
 [node name="ItemRegistry" type="Node" parent="."]
 script = ExtResource("1_jgjs8")
@@ -37,6 +34,7 @@ script = ExtResource("1_jgjs8")
 
 [node name="ItemDescriptorBase" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("5_3nf6a")
+MaxAutomaticStacking = null
 Id = "stone"
 FriendlyName = "Stoney Wonie"
 
@@ -51,14 +49,15 @@ script = ExtResource("7_dofv0")
 
 [node name="BlockDescriptorBase" type="Node" parent="BlockRegistry/AirDescriptor"]
 script = ExtResource("8_imvcx")
-Id = "crucible:air"
+IsSolid = false
+Id = "air"
 FriendlyName = "Air"
 
 [node name="StoneDescriptor" type="Node" parent="BlockRegistry" groups=["game_object"]]
 
 [node name="BlockDescriptorBase" type="Node" parent="BlockRegistry/StoneDescriptor"]
 script = ExtResource("8_imvcx")
-Id = "crucible:stone"
+Id = "stone"
 FriendlyName = "Stone"
 
 [node name="VoxelDataWorld" type="Node" parent="."]
@@ -67,6 +66,9 @@ script = ExtResource("7_haog7")
 [node name="VoxelMeshWorld" type="Node" parent="."]
 script = ExtResource("8_clxii")
 MeshMaterial = ExtResource("9_0k8ko")
+
+[node name="VoxelWorldFacade" type="Node" parent="."]
+script = ExtResource("12_1ygdg")
 
 [node name="ShipController" type="Node" parent="."]
 script = ExtResource("7_uvkwj")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bwk3kwpofprgx"]
+[gd_scene load_steps=9 format=3 uid="uid://bwk3kwpofprgx"]
 
 [ext_resource type="Material" uid="uid://cdig6ir5ovuwf" path="res://res/materials/block_pointer.tres" id="1_vg2b0"]
 [ext_resource type="Script" path="res://src/game/character/CharacterMotor.cs" id="2_6wpxx"]
@@ -10,13 +10,10 @@
 [sub_resource type="BoxMesh" id="BoxMesh_2hov2"]
 material = ExtResource("1_vg2b0")
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_ceicc"]
-size = Vector3(1, 2, 1)
-
 [sub_resource type="BoxMesh" id="BoxMesh_b4jh2"]
 size = Vector3(1, 2, 1)
 
-[node name="Character" type="CharacterBody3D" groups=["game_object"]]
+[node name="Character" type="Node3D" groups=["game_object"]]
 
 [node name="Pointer" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.01, 0, 0, 0, 1.01, 0, 0, 0, 1.01, 0, 4.00735, 0)
@@ -30,6 +27,7 @@ script = ExtResource("2_giamo")
 
 [node name="InventoryData" type="Node" parent="."]
 script = ExtResource("3_wqs0b")
+InventorySize = null
 
 [node name="DebugHud" type="RichTextLabel" parent="."]
 anchors_preset = 15
@@ -46,10 +44,6 @@ script = ExtResource("3_s8xtk")
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 script = ExtResource("3_kwyqf")
-
-[node name="Collider" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_ceicc")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

@@ -11,7 +11,6 @@ namespace VoidShips.game.character;
 public sealed partial class CharacterController : Node
 {
 	private VoxelDataWorld? _world;
-	private CharacterBody3D? _body;
 	private CharacterMotor? _motor;
 	private CameraController? _camera;
 
@@ -20,7 +19,6 @@ public sealed partial class CharacterController : Node
 	public override void _Ready()
 	{
 		_world = this.ParentGameObject<Node>().Component<VoxelDataWorld>();
-		_body = this.GameObject<CharacterBody3D>();
 		_motor = this.Component<CharacterMotor>();
 		_camera = this.Component<CameraController>();
 	}
@@ -42,9 +40,9 @@ public sealed partial class CharacterController : Node
 		// Handle movement
 		if (GameInputs.FpsJump.JustPressed && _motor!.IsOnGround)
 		{
-			var newVel = _body!.Velocity;
+			var newVel = _motor!.Velocity;
 			newVel.Y = GamePhysicsConf.PlayerJumpImpulse;
-			_body!.Velocity = newVel;
+			_motor!.Velocity = newVel;
 		}
 
 		var heading = Vector3.Zero;
@@ -56,7 +54,7 @@ public sealed partial class CharacterController : Node
 
 		heading = heading.Normalized();
 
-		_body!.Velocity += _camera!.RotatedHorizontally(
+		_motor!.Velocity += _camera!.RotatedHorizontally(
 			heading * GamePhysicsConf.PlayerHorizontalAccel * fDelta);
 
 		// Raycast demo

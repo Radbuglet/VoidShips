@@ -8,11 +8,11 @@ public sealed partial class DebugHud : RichTextLabel
 {
 	public override void _Process(double delta)
 	{
-		var body = this.GameObject<CharacterBody3D>();
+		var motor = this.Component<CharacterMotor>();
 
 		Text = $"VoidShips Debug Build\n"
-			+ $"[color=gray]Velocity:[/color] {FormatVector(body.Velocity)}\n"
-			+ $"[color=gray]Horizontal Speed:[/color] {new Vector2(body.Velocity.X, body.Velocity.Z).Length()}\n"
+			+ $"[color=gray]Velocity:[/color] {FormatVector(motor.Velocity)}\n"
+			+ $"[color=gray]Horizontal Speed:[/color] {new Vector2(motor.Velocity.X, motor.Velocity.Z).Length()}\n"
 			+ $"[color=gray]FPS:[/color] {Engine.GetFramesPerSecond()}\n";
 	}
 

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 public static class NodeUtil
 {
-	public static string StringifyNode(this Node node)
+	public static string StringifyNode(this Node? node)
 	{
-		return $"<{node.GetType()} @ {node.GetPath()}: {node}>";
+		return node == null ? "<null node>" : $"<{node.GetType()} @ {(node.IsInsideTree() ? node.GetPath() : "<not in tree>")}: {node}>";
 	}
 
 	public static IEnumerable<Node> Descendants(this Node node, Func<Node, bool> filter)

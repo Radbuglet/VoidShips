@@ -97,6 +97,14 @@ public struct AaQuad3
         return Rect.HasPoint(intersection.Pos.FlattenHv(Normal.Axis())) ? intersection : null;
     }
 
+    public readonly AaQuad3 Offset(Vector3 offset)
+    {
+        var (h, v) = Axis.OrthoHv();
+        return new AaQuad3(
+            Plane with { Origin = Plane.Origin + offset[(int)Plane.Normal.Axis()] },
+            new Rect2(Rect.Position + new Vector2(offset[(int)h], offset[(int)v]), Rect.Size));
+    }
+
     public readonly Aabb Extrude(float depth)
     {
         var position = Start;
