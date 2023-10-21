@@ -17,6 +17,11 @@ public static class EntityVecExt
     {
         return (Vector3I)entityVec.Floor();
     }
+
+    public static AabbI EntityAabbToWorldAabb(this Aabb aabb)
+    {
+        return AabbIExt.FromCornersAbs(aabb.Position.EntityVecToWorldVec(), aabb.End.EntityVecToWorldVec());
+    }
 }
 
 public static class WorldVecExt

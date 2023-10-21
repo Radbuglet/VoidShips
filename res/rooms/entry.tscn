@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=15 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -7,9 +7,11 @@
 [ext_resource type="Script" path="res://src/scripts/GameSceneInitializer.cs" id="5_0mkeh"]
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorBase.cs" id="5_3nf6a"]
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
+[ext_resource type="Script" path="res://src/game/voxel/registry/BlockRegistry.cs" id="7_dofv0"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelDataWorld.cs" id="7_haog7"]
 [ext_resource type="Script" path="res://src/game/ship/ShipController.cs" id="7_uvkwj"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelMeshWorld.cs" id="8_clxii"]
+[ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
 
@@ -41,6 +43,23 @@ FriendlyName = "Stoney Wonie"
 [node name="ItemDescriptorVisual" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("6_1sa0c")
 Color = Color(0.270588, 0.321569, 0.333333, 1)
+
+[node name="BlockRegistry" type="Node" parent="."]
+script = ExtResource("7_dofv0")
+
+[node name="AirDescriptor" type="Node" parent="BlockRegistry" groups=["game_object"]]
+
+[node name="BlockDescriptorBase" type="Node" parent="BlockRegistry/AirDescriptor"]
+script = ExtResource("8_imvcx")
+Id = "crucible:air"
+FriendlyName = "Air"
+
+[node name="StoneDescriptor" type="Node" parent="BlockRegistry" groups=["game_object"]]
+
+[node name="BlockDescriptorBase" type="Node" parent="BlockRegistry/StoneDescriptor"]
+script = ExtResource("8_imvcx")
+Id = "crucible:stone"
+FriendlyName = "Stone"
 
 [node name="VoxelDataWorld" type="Node" parent="."]
 script = ExtResource("7_haog7")

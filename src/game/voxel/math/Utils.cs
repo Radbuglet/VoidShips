@@ -51,22 +51,12 @@ public static class SignExt
         return value == 0 ? null : value < 0 ? Sign.Negative : Sign.Positive;
     }
     
-    public static Sign? CheckedSign(this double value)
-    {
-        return value == 0 ? null : value < 0 ? Sign.Negative : Sign.Positive;
-    }
-    
     public static Sign BiasedSign(this int value)
     {
         return value < 0 ? Sign.Negative : Sign.Positive;
     }
     
     public static Sign BiasedSign(this float value)
-    {
-        return value < 0 ? Sign.Negative : Sign.Positive;
-    }
-    
-    public static Sign BiasedSign(this double value)
     {
         return value < 0 ? Sign.Negative : Sign.Positive;
     }
@@ -79,6 +69,16 @@ public static class SignExt
     public static Sign Multiply(this Sign sign, Sign other)
     {
         return (Sign)((int)sign ^ (int)other);
+    }
+    
+    public static int Multiply(this Sign sign, int other)
+    {
+        return sign.IsNegative() ? -other : other;
+    }
+    
+    public static float Multiply(this Sign sign, float other)
+    {
+        return sign.IsNegative() ? -other : other;
     }
 
     public static short AsUnitShort(this Sign sign)
@@ -94,11 +94,6 @@ public static class SignExt
     public static float AsUnitFloat(this Sign sign)
     {
         return sign.IsNegative() ? -1F : 1F;
-    }
-    
-    public static double AsUnitDouble(this Sign sign)
-    {
-        return sign.IsNegative() ? -1D : 1D;
     }
 }
 

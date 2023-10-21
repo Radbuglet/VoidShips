@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Godot;
 
 namespace VoidShips.game.voxel.math;
@@ -100,16 +99,20 @@ public struct AaQuad3
 
     public readonly Aabb Extrude(float depth)
     {
-        Debug.Assert(depth >= 0);
-
         var position = Start;
-        if (Sign.IsNegative()) position[(int)Axis] -= depth;
+        depth = Sign.Multiply(depth);
+
+        if (depth < 0)
+        {
+            depth = -depth;
+            position[(int)Axis] -= depth;
+        }
 
         return new Aabb(position, Rect.Size.Deepen(Axis, depth));
     }
 }
 
-// === AabbN === //
+// === Rect === //
 
 public static class RectExt
 {
@@ -119,11 +122,18 @@ public static class RectExt
     }
 }
 
+// === Aabb === //
+
 public static class AabbExt
 {
-    public static Aabb FromCorners(Vector3 min, Vector3 max)
+    public static Aabb FromCornersRaw(Vector3 min, Vector3 max)
     {
         return new Aabb(min, max - min);
+    }
+    
+    public static Aabb FromCornersAbs(Vector3 min, Vector3 max)
+    {
+        return FromCornersRaw(min, max).Abs();
     }
     
     public static AaQuad3 FaceQuad(this Aabb aabb, BlockFace face)
@@ -132,5 +142,56 @@ public static class AabbExt
         var rect = RectExt.FromCorners(aabb.Position.FlattenHv(axis), aabb.End.FlattenHv(axis));
         var origin = sign.IsNegative() ? aabb.Position[(int)axis] : aabb.End[(int)axis];
         return new AaQuad3(new AaPlane3(origin, face), rect);
+    }
+
+    public static Aabb WithPosition(this Aabb aabb, Vector3 start)
+    {
+        var movedBy = aabb.Position - start;
+        aabb.Position = start;
+        aabb.Size += movedBy;
+        return aabb;
+    }
+}
+
+// === AabbI === //
+
+public struct AabbI
+{
+    public Vector3I Position;
+    public Vector3I Size;
+
+    public Vector3I End
+    {
+        readonly get => Position + Size;
+        set => Size = value - Position;
+    }
+
+    public readonly int Volume => Size.X * Size.Y * Size.Z;
+
+    public AabbI(Vector3I position, Vector3I size)
+    {
+        Position = position;
+        Size = size;
+    }
+
+    public readonly AabbI Abs()
+    {
+        var end = End;
+        return new AabbI(
+            new Vector3I(Mathf.Min(Position.X, end.X), Mathf.Min(Position.Y, end.Y), Mathf.Min(Position.Z, end.Z)),
+            Size.Abs());
+    }
+}
+
+public static class AabbIExt
+{
+    public static AabbI FromCornersRaw(Vector3I min, Vector3I max)
+    {
+        return new AabbI(min, max - min);
+    }
+
+    public static AabbI FromCornersAbs(Vector3I min, Vector3I max)
+    {
+        return FromCornersRaw(min, max).Abs();
     }
 }

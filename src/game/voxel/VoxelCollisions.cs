@@ -1,12 +1,61 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 using VoidShips.game.voxel.math;
+using VoidShips.game.voxel.registry;
 using Axis3 = VoidShips.game.voxel.math.Axis3;
 using BlockFace = VoidShips.game.voxel.math.BlockFace;
 using Segment3D = VoidShips.game.voxel.math.Segment3D;
 
 namespace VoidShips.game.voxel;
+
+// === Collisions === //
+
+public sealed class VoxelCollisionChecker
+{
+    public readonly VoxelDataWorld World;
+    public readonly BlockRegistry Registry;
+    public float Tolerance = 0.0005F;
+    
+    public VoxelCollisionChecker(VoxelDataWorld world, BlockRegistry registry)
+    {
+        World = world;
+        Registry = registry;
+    }
+
+    public float CastVolume(AaQuad3 quad, float depth)
+    {
+        // N.B. to ensure that `tolerance` is respected, we have to increase our check volume by
+        // `tolerance` so that we catch blocks that are outside the check volume but may nonetheless
+        // wish to enforce a tolerance margin of their own.
+        //
+        // We do this to prevent the following scenario:
+        //
+        // ```
+        // 0   1   2
+        // *---*---*
+        // | %--->*|
+        // *---*---*
+        //       |--   Let's say this is the required tolerance...
+        //   |----|    ...and this is the actual movement delta.
+        //
+        // Because our movement delta never hits the block face at `x = 2`, it never requires the face to
+        // contribute to tolerance checking, allowing us to bypass its tolerance and eventually "tunnel"
+        // through the occluder.
+        // ```
+        //
+        // If these additional blocks don't contribute to collision detection with their tolerance, we'll
+        // just ignore them.
+        var checkAabb = quad.Extrude(depth + Tolerance).EntityAabbToWorldAabb();
+        var cachedLoc = World.GetPointer(checkAabb.Position);
+
+        // TODO: https://github.com/Radbuglet/crucible/blob/be6acd16ba5f5db22bc59eed80478333ffecf830/src/foundation/shared/src/voxel/collision.rs#L358
+        throw new NotImplementedException();
+    }
+}
+
+// === RayCast === //
 
 public sealed class VoxelRaycast
 {
