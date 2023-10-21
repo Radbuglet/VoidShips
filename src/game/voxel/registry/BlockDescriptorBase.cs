@@ -7,10 +7,11 @@ public sealed partial class BlockDescriptorBase : AbstractBaseDescriptor
 {
     [Export] public bool IsSolid = true;
 
-    public readonly AxisAlignedMesh CollisionMesh = new();
+    public AxisAlignedMesh CollisionMesh { get; private set; } = null!;
 
     public override void _Ready()
     {
+        CollisionMesh = new AxisAlignedMesh();
         if (IsSolid)
             CollisionMesh.AddAabb(new Aabb(Vector3.Zero, Vector3.One), null);
     }

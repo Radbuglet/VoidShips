@@ -170,7 +170,7 @@ public sealed class VoxelRaycast
         // And update their block pointers.
         for (var i = 0; i < intersections.Count; i++)
         {
-            CurrentBlock = CurrentBlock.Neighbor((math.BlockFace) intersections[i].EntryFace);
+            CurrentBlock = CurrentBlock.Neighbor(intersections[i].EntryFace);
             intersections[i] = intersections[i] with
             {
                 Pointer = CurrentBlock,

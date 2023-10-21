@@ -4,7 +4,7 @@ using VoidShips.Util;
 
 namespace VoidShips.game.registry;
 
-[Component]
+[Component]  // N.B. this is fine because of the generic parameter.
 public abstract partial class AbstractRegistry<T> : Node where T : Node
 {
 	private readonly Dictionary<string, T> _kinds = new();
