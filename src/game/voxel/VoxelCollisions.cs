@@ -3,28 +3,18 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 using VoidShips.game.voxel.math;
-using VoidShips.game.voxel.registry;
-using Axis3 = VoidShips.game.voxel.math.Axis3;
-using BlockFace = VoidShips.game.voxel.math.BlockFace;
-using Segment3D = VoidShips.game.voxel.math.Segment3D;
 
 namespace VoidShips.game.voxel;
 
 // === Collisions === //
 
-public sealed class VoxelCollisionChecker
+public static class VoxelCollisionCheckerExt
 {
-    public readonly VoxelDataWorld World;
-    public readonly BlockRegistry Registry;
-    public float Tolerance = 0.0005F;
-    
-    public VoxelCollisionChecker(VoxelDataWorld world, BlockRegistry registry)
-    {
-        World = world;
-        Registry = registry;
-    }
+    private const float Tolerance = 0.0005F;
 
-    public float CastVolume(AaQuad3 quad, float depth)
+    public delegate bool ColliderFilter(VoxelPointer pointer, Node? meta);
+
+    public static float CastVolume(this VoxelWorldFacade facade, AaQuad3 quad, float delta, ColliderFilter? filter = null)
     {
         // N.B. to ensure that `tolerance` is respected, we have to increase our check volume by
         // `tolerance` so that we catch blocks that are outside the check volume but may nonetheless
@@ -47,11 +37,68 @@ public sealed class VoxelCollisionChecker
         //
         // If these additional blocks don't contribute to collision detection with their tolerance, we'll
         // just ignore them.
-        var checkAabb = quad.Extrude(depth + Tolerance).EntityAabbToWorldAabb();
-        var cachedLoc = World.GetPointer(checkAabb.Position);
+        var checkAabb = quad.Extrude(delta + Tolerance).EntityAabbToWorldAabb();
+        var cachedLoc = facade.World.GetPointer(checkAabb.Position);
+        var minDepth = delta;
+        
+        // For every block in the volume of potential occluders...
+        foreach (var blockPos in checkAabb.WorldAabbIterBlocksIncl())
+        {
+            var block = cachedLoc.WithPos(blockPos);
+            var blockMesh = facade.GetBlock(block).CollisionMesh;
 
-        // TODO: https://github.com/Radbuglet/crucible/blob/be6acd16ba5f5db22bc59eed80478333ffecf830/src/foundation/shared/src/voxel/collision.rs#L358
-        throw new NotImplementedException();
+            // For every occluder produced by that block...
+            foreach (var (occluderQuad, meta) in blockMesh.PlanesFacing(quad.Normal.Inverse()))
+            {
+                // Filter occluders by whether we are affected by them.
+                if (filter != null && !filter(block, meta)) {
+                    continue;
+                }
+
+                if (!occluderQuad.Rect.Intersection(quad.Rect).HasArea())
+                {
+                    continue;
+                }
+                
+                // Find its depth along the axis of movement
+                var myDepth = occluderQuad.Origin;
+
+                // And compare that to the starting depth to find the maximum allowable distance.
+                var relDepth = Math.Abs(myDepth - quad.Origin);
+
+                // Now, provide `tolerance`.
+                // This step also ensures that, if the block plus its tolerance is outside of our delta,
+                // it will have essentially zero effect on collision detection.
+                relDepth -= Tolerance;
+
+                // If `rel_depth` is negative, we were not within tolerance to begin with. We trace
+                // this scenario for debug purposes.
+
+                // We still clamp this to `[0..)`.
+                minDepth = Math.Min(minDepth, relDepth);
+            }
+        }
+
+        return minDepth;
+    }
+
+    public static Vector3 MoveRigidBody(this VoxelWorldFacade facade, Aabb aabb, Vector3 delta, ColliderFilter? filter = null)
+    {
+        foreach (var axis in Axis3Ext.Variants()) {
+            // Decompose the movement part
+            var signedDelta = delta[(int) axis];
+            var unsignedDelta = Math.Abs(signedDelta);
+            var sign = signedDelta.BiasedSign();
+            var face = BlockFaceExt.Compose(axis, sign);
+
+            // Determine how far we can move
+            var actualDelta = facade.CastVolume(aabb.FaceQuad(face), unsignedDelta, filter);
+
+            // Commit the movement
+            aabb.Position += face.UnitVectorF() * actualDelta;
+        }
+
+        return aabb.Position;
     }
 }
 

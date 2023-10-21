@@ -6,7 +6,7 @@ using VoidShips.Util;
 
 namespace VoidShips.game.voxel.registry;
 
-public sealed partial class AxisAlignedMesh : Node
+public sealed class AxisAlignedMesh
 {
     private readonly List<(Aabb, Node?)> _volumes = new();
     
@@ -22,6 +22,11 @@ public sealed partial class AxisAlignedMesh : Node
     public void AddQuad(AaQuad3 plane, Node? data)
     {
         _quads[(int) plane.Normal].Add((plane, data));
+    }
+
+    public IEnumerable<(Aabb, Node?)> Volumes()
+    {
+        return _volumes;
     }
 
     public IEnumerable<(AaQuad3, Node?)> VolumePlanesFacing(BlockFace face)

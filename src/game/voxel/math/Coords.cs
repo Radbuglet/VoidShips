@@ -56,6 +56,22 @@ public static class WorldVecExt
     {
         return new AaPlane3(worldVec[(int)face.Axis()] + (face.IsSignNegative() ? 0 : 1), face);
     }
+
+    public static IEnumerable<Vector3I> WorldAabbIterBlocksExcl(this AabbI aabb)
+    {
+        for (var x = aabb.Position.X; x < aabb.End.X; x++)
+        for (var y = aabb.Position.Y; y < aabb.End.Y; y++)
+        for (var z = aabb.Position.Z; z < aabb.End.Z; z++)
+            yield return new Vector3I(x, y, z);
+    }
+    
+    public static IEnumerable<Vector3I> WorldAabbIterBlocksIncl(this AabbI aabb)
+    {
+        for (var x = aabb.Position.X; x <= aabb.End.X; x++)
+        for (var y = aabb.Position.Y; y <= aabb.End.Y; y++)
+        for (var z = aabb.Position.Z; z <= aabb.End.Z; z++)
+            yield return new Vector3I(x, y, z);
+    }
 }
 
 public static class BlockVecExt

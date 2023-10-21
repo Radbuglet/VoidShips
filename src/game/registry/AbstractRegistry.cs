@@ -1,17 +1,16 @@
 using System.Collections.Generic;
 using Godot;
-using VoidShips.game.inventory.descriptor;
 using VoidShips.Util;
 
 namespace VoidShips.game.registry;
 
 [Component]
-public abstract partial class AbstractRegistry : Node
+public abstract partial class AbstractRegistry<T> : Node where T : Node
 {
-	private readonly Dictionary<string, Node> _kinds = new();
-	private readonly List<Node> _indices = new();
+	private readonly Dictionary<string, T> _kinds = new();
+	private readonly List<T> _indices = new();
 	
-	public void Register(Node kind)
+	public void Register(T kind)
 	{
 		var descriptor = kind.Component<AbstractBaseDescriptor>();
 		descriptor.Index = (short) _indices.Count;
@@ -22,15 +21,15 @@ public abstract partial class AbstractRegistry : Node
 	public void RegisterChildren()
 	{
 		foreach (var child in GetChildren())
-			Register(child);
+			Register(child.Component<T>());
 	}
 
-	public Node? Lookup(string id)
+	public T? Lookup(string id)
 	{
 		return _kinds.TryGetValue(id, out var v) ? v : null;
 	}
 	
-	public Node Lookup(short id)
+	public T Lookup(short id)
 	{
 		return _indices[id];
 	}
