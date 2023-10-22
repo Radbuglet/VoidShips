@@ -12,7 +12,7 @@ public sealed partial class CharacterMotor : Node
 	[Export] public Vector3 ColliderSize = new(0.8F, 1.7F, 0.8F);
 	
 	private Node3D? _body;
-	private VoxelWorldFacade? _world;
+	private VoxelWorldPalletized? _world;
 
 	private bool[] _touching = new bool[BlockFaceExt.VariantCount];
 	public Vector3 Velocity;
@@ -23,7 +23,7 @@ public sealed partial class CharacterMotor : Node
 	public override void _Ready()
 	{
 		_body = this.GameObject<Node3D>();
-		_world = this.ParentGameObject<Node>().Component<VoxelWorldFacade>();
+		_world = this.ParentGameObject<Node>().Component<VoxelWorldPalletized>();
 	}
 
 	public override void _PhysicsProcess(double delta)

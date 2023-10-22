@@ -8,6 +8,7 @@ namespace VoidShips.game.voxel;
 [Component]
 public sealed partial class VoxelMeshChunk : Node
 {
+    internal long UpdateGeneration;
     private MultiMeshInstance3D[]? _meshes;
 
     public void UpdateMesh(Material meshMaterial)

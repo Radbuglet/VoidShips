@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=16 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -12,7 +12,9 @@
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
-[ext_resource type="Script" path="res://src/game/voxel/VoxelWorldFacade.cs" id="12_1ygdg"]
+[ext_resource type="Script" path="res://src/game/voxel/VoxelWorldPalletized.cs" id="11_6544e"]
+[ext_resource type="Script" path="res://src/game/voxel/loader/VoxelLoaderImmediate.cs" id="12_ew0mq"]
+[ext_resource type="PackedScene" uid="uid://bg72uoyxm4qyj" path="res://res/actors/voxel_chunk.tscn" id="13_t2umf"]
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
 
@@ -33,6 +35,7 @@ script = ExtResource("1_jgjs8")
 
 [node name="ItemDescriptorBase" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("5_3nf6a")
+MaxAutomaticStacking = null
 Id = "stone"
 FriendlyName = "Stoney Wonie"
 
@@ -65,8 +68,12 @@ script = ExtResource("7_haog7")
 script = ExtResource("8_clxii")
 MeshMaterial = ExtResource("9_0k8ko")
 
-[node name="VoxelWorldFacade" type="Node" parent="."]
-script = ExtResource("12_1ygdg")
+[node name="VoxelWorldPalletized" type="Node" parent="."]
+script = ExtResource("11_6544e")
+
+[node name="VoxelLoaderImmediate" type="Node" parent="."]
+script = ExtResource("12_ew0mq")
+ChunkScene = ExtResource("13_t2umf")
 
 [node name="GameSceneInitializer" type="Node" parent="." node_paths=PackedStringArray("LocalPlayer")]
 script = ExtResource("5_0mkeh")

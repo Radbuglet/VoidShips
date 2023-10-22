@@ -14,7 +14,7 @@ public static class VoxelCollisionCheckerExt
 
     public delegate bool ColliderFilter(VoxelPointer pointer, Node? meta);
 
-    public static float CastVolume(this VoxelWorldFacade facade, AaQuad3 quad, float delta, ColliderFilter? filter = null)
+    public static float CastVolume(this VoxelWorldPalletized facade, AaQuad3 quad, float delta, ColliderFilter? filter = null)
     {
         // N.B. to ensure that `tolerance` is respected, we have to increase our check volume by
         // `tolerance` so that we catch blocks that are outside the check volume but may nonetheless
@@ -60,7 +60,6 @@ public static class VoxelCollisionCheckerExt
 
                 if (!absOccluderQuad.Rect.Intersection(quad.Rect).HasArea())
                 {
-                    GD.Print("Ignored!");
                     continue;
                 }
                 
@@ -86,7 +85,7 @@ public static class VoxelCollisionCheckerExt
         return minDepth;
     }
 
-    public static Vector3 MoveRigidBody(this VoxelWorldFacade facade, Aabb aabb, Vector3 delta, ColliderFilter? filter = null)
+    public static Vector3 MoveRigidBody(this VoxelWorldPalletized facade, Aabb aabb, Vector3 delta, ColliderFilter? filter = null)
     {
         foreach (var axis in Axis3Ext.Variants()) {
             // Decompose the movement part

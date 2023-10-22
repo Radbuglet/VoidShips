@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 using VoidShips.game.voxel.math;
@@ -10,6 +11,7 @@ public sealed partial class VoxelDataChunk : Node
 {
 	internal VoxelDataChunk?[] Neighbors = new VoxelDataChunk[VoxelCoordsExt.ChunkVolume]; 
 	
+	public int AirBlockCount { get; private set; }
 	public VoxelDataWorld? VoxelWorld { get; internal set; }
 	private readonly short[] _rawBlockData = new short[VoxelCoordsExt.ChunkVolume];
 
@@ -32,6 +34,17 @@ public sealed partial class VoxelDataChunk : Node
 	public VoxelDataChunk? Neighbor(BlockFace face)
 	{
 		return Neighbors[(int) face];
+	}
+
+	public IEnumerable<VoxelDataChunk> NeighborsAndSelf()
+	{
+		yield return this;
+		
+		foreach (var face in BlockFaceExt.BlockFaces())
+		{
+			var neighbor = Neighbor(face);
+			if (neighbor != null) yield return neighbor;
+		}
 	}
 
 	public VoxelPointer GetPointer()
@@ -62,6 +75,10 @@ public sealed partial class VoxelDataChunk : Node
 			IsDirty = true;
 			VoxelWorld?.DirtyChunks.Add(this);
 		}
+
+		var wasAir = _rawBlockData[index] == 0 ? 1 : 0;
+		var isAir = data == 0 ? 1 : 0;
+		AirBlockCount += isAir - wasAir;
 
 		_rawBlockData[index] = data;
 	}

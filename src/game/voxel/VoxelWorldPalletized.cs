@@ -5,7 +5,7 @@ using VoidShips.Util;
 namespace VoidShips.game.voxel;
 
 [Component]
-public sealed partial class VoxelWorldFacade : Node
+public sealed partial class VoxelWorldPalletized : Node
 {
     private VoxelDataWorld? _world;
     private BlockRegistry? _registry;

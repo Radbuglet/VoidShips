@@ -70,15 +70,19 @@ public readonly struct VoxelPointer
         return mutated;
     }
 
-    public short GetData()
+    public VoxelDataChunk? GetChunk()
     {
         FetchChunk(out var chunk);
-        return chunk?.GetBlockData(GetBlockIndex()) ?? 0;
+        return chunk;
+    }
+
+    public short GetData()
+    {
+        return GetChunk()?.GetBlockData(GetBlockIndex()) ?? 0;
     }
     
     public void SetData(short data)
     {
-        FetchChunk(out var chunk);
-        chunk?.SetBlockData(GetBlockIndex(), data);
+        GetChunk()?.SetBlockData(GetBlockIndex(), data);
     }
 }
