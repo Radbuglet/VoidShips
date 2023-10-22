@@ -70,16 +70,19 @@ public sealed partial class VoxelDataChunk : Node
 
 	public void SetBlockData(int index, short data)
 	{
-		if (!IsDirty)
-		{
-			IsDirty = true;
-			VoxelWorld?.DirtyChunks.Add(this);
-		}
+		MarkDirty();
 
 		var wasAir = _rawBlockData[index] == 0 ? 1 : 0;
 		var isAir = data == 0 ? 1 : 0;
 		AirBlockCount += isAir - wasAir;
 
 		_rawBlockData[index] = data;
+	}
+
+	public void MarkDirty()
+	{
+		if (IsDirty) return;
+		IsDirty = true;
+		VoxelWorld?.DirtyChunks.Add(this);
 	}
 }

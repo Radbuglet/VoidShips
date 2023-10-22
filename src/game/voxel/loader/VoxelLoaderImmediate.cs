@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
@@ -49,6 +50,14 @@ public sealed partial class VoxelLoaderImmediate : Node
             chunkData.ChunkPos = pointer.Pos.WorldVecToChunkVec();
             _world!.AddChunk(chunkData);
             return chunkData;
+        }
+    }
+
+    public void DestroyEmptyImmediately(IEnumerable<VoxelDataChunk> dirty)
+    {
+        foreach (var chunk in dirty)
+        {
+            if (chunk.AirBlockCount == 0) chunk.VoxelWorld!.RemoveChunk(chunk);
         }
     }
 }

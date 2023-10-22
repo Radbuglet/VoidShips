@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using Godot;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
@@ -9,9 +10,12 @@ namespace VoidShips.game.voxel;
 public sealed partial class VoxelDataWorld : Node
 {
     [Signal] public delegate void ChunkAddedEventHandler(VoxelDataChunk chunk);
+    [Signal] public delegate void ChunkAboutToRemoveEventHandler(VoxelDataChunk chunk);
     
     private readonly Dictionary<Vector3I, VoxelDataChunk> _chunks = new();
     internal HashSet<VoxelDataChunk> DirtyChunks = new();
+
+    public int ChunkCount => _chunks.Count;
 
     public void AddChunk(VoxelDataChunk chunk)
     {
@@ -28,12 +32,42 @@ public sealed partial class VoxelDataWorld : Node
             if (neighbor != null)
                 neighbor.Neighbors[(int)face.Inverse()] = chunk;
         }
+        
+        // Mark the chunk as dirty
+        chunk.IsDirty = true;
+        DirtyChunks.Add(chunk);
 
         // Register chunk
         chunk.VoxelWorld = this;
         _chunks.Add(chunk.ChunkPos, chunk);
-        DirtyChunks.Add(chunk);
+        
+        // Send signal
         EmitSignal(SignalName.ChunkAdded, chunk);
+    }
+
+    public void RemoveChunk(VoxelDataChunk chunk)
+    {
+        Debug.Assert(chunk.VoxelWorld == this);
+        
+        // Send signal
+        EmitSignal(SignalName.ChunkAboutToRemove, chunk);
+        
+        // Remove the chunk from the map
+        _chunks.Remove(chunk.ChunkPos);
+        chunk.VoxelWorld = null;
+        
+        // Unlink neighbors and mark them as dirty
+        foreach (var face in BlockFaceExt.BlockFaces())
+        {
+            var neighbor = chunk.Neighbor(face);
+            if (neighbor == null) continue;
+            
+            neighbor.Neighbors[(int) face.Inverse()] = null;
+            neighbor.MarkDirty();
+        }
+        
+        // Remove game object
+        chunk.GameObject<Node>().QueueFree();
     }
 
     public VoxelDataChunk? GetChunk(Vector3I pos)

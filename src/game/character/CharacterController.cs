@@ -2,6 +2,7 @@ using System.Linq;
 using Godot;
 using VoidShips.Constants;
 using VoidShips.game.voxel;
+using VoidShips.game.voxel.loader;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
 
@@ -11,6 +12,7 @@ namespace VoidShips.game.character;
 public sealed partial class CharacterController : Node
 {
 	private VoxelDataWorld? _world;
+	private VoxelLoaderImmediate? _loader;
 	private CharacterMotor? _motor;
 	private CameraController? _camera;
 
@@ -19,6 +21,7 @@ public sealed partial class CharacterController : Node
 	public override void _Ready()
 	{
 		_world = this.ParentGameObject<Node>().Component<VoxelDataWorld>();
+		_loader = this.ParentGameObject<Node>().Component<VoxelLoaderImmediate>();
 		_motor = this.Component<CharacterMotor>();
 		_camera = this.Component<CameraController>();
 	}
@@ -73,7 +76,11 @@ public sealed partial class CharacterController : Node
 			foreach (var collision in collisions.Where(collision => collision.Pointer.GetData() != 0))
 			{
 				if (GameInputs.FpsPlace.JustPressed)
-					collision.Pointer.Neighbor(collision.EntryFace.Inverse()).SetData(1);
+				{
+					var block = collision.Pointer.Neighbor(collision.EntryFace.Inverse());
+					_loader!.LoadChunk(block);
+					block.SetData(1);
+				}
 				if (GameInputs.FpsBreak.JustPressed)
 					collision.Pointer.SetData(0);
 				

@@ -33,8 +33,12 @@ public sealed partial class VoxelDemoRunner : Node
 
     public override void _Process(double delta)
     {
-        // Update mesh
         var dirtyChunks = _worldData!.FlushDirtyChunks();
+        
+        // Update meshes
         _worldMesh!.UpdateMeshes(dirtyChunks);
+        
+        // Delete empty
+        _worldLoader!.DestroyEmptyImmediately(dirtyChunks);
     }
 }

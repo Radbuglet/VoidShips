@@ -35,7 +35,6 @@ script = ExtResource("1_jgjs8")
 
 [node name="ItemDescriptorBase" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("5_3nf6a")
-MaxAutomaticStacking = null
 Id = "stone"
 FriendlyName = "Stoney Wonie"
 
