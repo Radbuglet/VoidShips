@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=14 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockRegistry.cs" id="7_dofv0"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelDataWorld.cs" id="7_haog7"]
-[ext_resource type="Script" path="res://src/game/ship/ShipController.cs" id="7_uvkwj"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelMeshWorld.cs" id="8_clxii"]
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
@@ -21,7 +20,7 @@
 environment = ExtResource("1_rpbss")
 
 [node name="Character" parent="." instance=ExtResource("3_2htuu")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 30, 6)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 4, 6)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 0, 5, 0)
@@ -34,7 +33,6 @@ script = ExtResource("1_jgjs8")
 
 [node name="ItemDescriptorBase" type="Node" parent="ItemRegistry/StoneDescriptor"]
 script = ExtResource("5_3nf6a")
-MaxAutomaticStacking = null
 Id = "stone"
 FriendlyName = "Stoney Wonie"
 
@@ -69,9 +67,6 @@ MeshMaterial = ExtResource("9_0k8ko")
 
 [node name="VoxelWorldFacade" type="Node" parent="."]
 script = ExtResource("12_1ygdg")
-
-[node name="ShipController" type="Node" parent="."]
-script = ExtResource("7_uvkwj")
 
 [node name="GameSceneInitializer" type="Node" parent="." node_paths=PackedStringArray("LocalPlayer")]
 script = ExtResource("5_0mkeh")

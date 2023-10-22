@@ -24,12 +24,9 @@ public sealed partial class VoxelDemoRunner : Node
         _worldData.AddChunk(mainChunk.Component<VoxelDataChunk>());
         
         // Populate it
-        var rng = new RandomNumberGenerator();
-
-        for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
-        {
-            mainChunk.Component<VoxelDataChunk>().GetPointer(i).SetData(1);
-        }
+        for (var x = 0; x < VoxelCoordsExt.ChunkEdge; x++)
+        for (var z = 0; z < VoxelCoordsExt.ChunkEdge; z++)
+            mainChunk.Component<VoxelDataChunk>().GetPointer(new Vector3I(x, 0, z)).SetData(1);
     }
 
     public override void _Process(double delta)

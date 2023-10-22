@@ -43,6 +43,12 @@ public sealed partial class VoxelDataChunk : Node
 	{
 		return new VoxelPointer(VoxelWorld!, this, MinWorldPos + index.BlockIndexToVec());
 	}
+	
+	public VoxelPointer GetPointer(Vector3I pos)
+	{
+		Debug.Assert(pos.BlockVecIsValid());
+		return new VoxelPointer(VoxelWorld!, this, MinWorldPos + pos);
+	}
 
 	public short GetBlockData(int index)
 	{
