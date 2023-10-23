@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=16 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -15,20 +15,6 @@
 [ext_resource type="Script" path="res://src/game/voxel/VoxelWorldPalletized.cs" id="11_6544e"]
 [ext_resource type="Script" path="res://src/game/voxel/loader/VoxelLoaderImmediate.cs" id="12_ew0mq"]
 [ext_resource type="PackedScene" uid="uid://bg72uoyxm4qyj" path="res://res/actors/voxel_chunk.tscn" id="13_t2umf"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r7l66"]
-
-[sub_resource type="BoxMesh" id="BoxMesh_gupdn"]
-material = SubResource("StandardMaterial3D_r7l66")
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6xqfi"]
-albedo_color = Color(0, 1, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qwriq"]
-albedo_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_catw5"]
-albedo_color = Color(0, 0, 1, 1)
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
 
@@ -94,28 +80,3 @@ LocalPlayer = NodePath("../Character")
 
 [node name="VoxelDemoRunner" type="Node" parent="."]
 script = ExtResource("10_hdkvm")
-
-[node name="WayFinder" type="Node3D" parent="."]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 8, 0)
-
-[node name="Node3D" type="MeshInstance3D" parent="WayFinder"]
-mesh = SubResource("BoxMesh_gupdn")
-skeleton = NodePath("../..")
-
-[node name="Node3D2" type="MeshInstance3D" parent="WayFinder"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-mesh = SubResource("BoxMesh_gupdn")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_6xqfi")
-
-[node name="Node3D3" type="MeshInstance3D" parent="WayFinder"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 0)
-mesh = SubResource("BoxMesh_gupdn")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_qwriq")
-
-[node name="Node3D4" type="MeshInstance3D" parent="WayFinder"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
-mesh = SubResource("BoxMesh_gupdn")
-skeleton = NodePath("../..")
-surface_material_override/0 = SubResource("StandardMaterial3D_catw5")

@@ -66,6 +66,9 @@ public sealed partial class VoxelDataWorld : Node
             neighbor.MarkDirty();
         }
         
+        // Unmark as dirty
+        if (chunk.IsDirty) DirtyChunks.Remove(chunk);
+
         // Remove game object
         chunk.GameObject<Node>().QueueFree();
     }

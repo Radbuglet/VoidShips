@@ -1,4 +1,3 @@
-using System.Linq;
 using Godot;
 using VoidShips.game.voxel.math;
 using VoidShips.Util;
@@ -83,18 +82,15 @@ public sealed partial class VoxelMeshChunk : Node
                 var neighborPos = ptr.Neighbor(face);
                 if (neighborPos.GetData() != 0) continue;
 
-                if (mm.VisibleInstanceCount >= mm.InstanceCount)
-                {
-                    var buffer = mm.Buffer;
-                    System.Array.Resize(ref buffer, buffer.Length * 2);
-                    mm.InstanceCount *= 2;
-                    mm.Buffer = buffer;
-                }
+                mm.ReserveCapacityForOne();
 
                 var target = mm.VisibleInstanceCount++;
                 mm.SetInstanceColor(target, Color.FromHsv(mainData / 5F, 0.5f, 0.5f));
                 mm.SetInstanceTransform(target, BlockFaceTransforms[(int) face].Translated(ptr.Pos - chunk.MinWorldPos));
             }
         }
+        
+        // Try to shrink the buffer if we ended up being significantly smaller than it
+        mm.ShrinkCapacity();
     }
 }
