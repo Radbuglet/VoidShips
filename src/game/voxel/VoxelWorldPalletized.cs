@@ -21,6 +21,6 @@ public sealed partial class VoxelWorldPalletized : Node
 
     public BlockDescriptorBase GetBlock(VoxelPointer pointer)
     {
-        return Registry.Lookup(pointer.GetData());
+        return Registry.Lookup(pointer.GetData()).Component<BlockDescriptorBase>();
     }
 }

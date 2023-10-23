@@ -62,7 +62,7 @@ public sealed partial class CharacterController : Node
 
 		// Raycast demo
 		var pointer = GetNode<Node3D>("../Pointer"); 
-		pointer.GlobalPosition = _camera.GlobalPosition + _camera.Rotated(Vector3.Forward) * 7;
+		pointer.Visible = false;
 		
 		var ray = new VoxelRaycast(
 			_world!,
@@ -85,6 +85,7 @@ public sealed partial class CharacterController : Node
 					collision.Pointer.SetData(0);
 				
 				pointer.GlobalPosition = collision.Pointer.Pos + Vector3.One * 0.5f;
+				pointer.Visible = true;
 				goto end;
 			}
 		}

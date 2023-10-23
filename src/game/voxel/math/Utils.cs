@@ -187,6 +187,16 @@ public static class Axis3Ext
         target[(int)axis] = perp;
         return target;
     }
+
+    public static Transform3D Rotate180Transform(this Axis3 axis)
+    {
+        return axis switch
+        {
+            Axis3.X => Transform3D.Identity.Rotated(new Vector3(0, 1, 0), Mathf.Pi),
+            Axis3.Y => Transform3D.Identity.Rotated(new Vector3(0, 0, 1), Mathf.Pi),
+            _ => Transform3D.Identity.Rotated(new Vector3(0, 1, 0), Mathf.Pi)
+        };
+    }
 }
 
 // === BlockFace === //

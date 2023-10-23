@@ -4,13 +4,12 @@ using VoidShips.Util;
 
 namespace VoidShips.game.registry;
 
-[Component]  // N.B. this is fine because of the generic parameter.
-public abstract partial class AbstractRegistry<T> : Node where T : Node
+public abstract partial class AbstractRegistry : Node
 {
-	private readonly Dictionary<string, T> _kinds = new();
-	private readonly List<T> _indices = new();
+	private readonly Dictionary<string, Node> _kinds = new();
+	private readonly List<Node> _indices = new();
 	
-	public void Register(T kind)
+	public void Register(Node kind)
 	{
 		var descriptor = kind.Component<AbstractBaseDescriptor>();
 		descriptor.Index = (short) _indices.Count;
@@ -21,15 +20,15 @@ public abstract partial class AbstractRegistry<T> : Node where T : Node
 	public void RegisterChildren()
 	{
 		foreach (var child in GetChildren())
-			Register(child.Component<T>());
+			Register(child);
 	}
 
-	public T? Lookup(string id)
+	public Node? Lookup(string id)
 	{
 		return _kinds.TryGetValue(id, out var v) ? v : null;
 	}
 	
-	public T Lookup(short id)
+	public Node Lookup(short id)
 	{
 		return _indices[id];
 	}

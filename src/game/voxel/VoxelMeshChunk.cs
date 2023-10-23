@@ -9,46 +9,68 @@ namespace VoidShips.game.voxel;
 public sealed partial class VoxelMeshChunk : Node
 {
     internal long UpdateGeneration;
-    private MultiMeshInstance3D[]? _meshes;
+    private MultiMeshInstance3D? _mesh;
+
+    private static readonly Transform3D[] BlockFaceTransforms = ArrayUtil.InitArray(BlockFaceExt.VariantCount, i =>
+    {
+        var face = (BlockFace) i;
+        var xform = Transform3D.Identity;
+        
+        // Apply the rotation
+        switch (face.Axis())
+        {
+            case Axis3.X:
+                xform = xform.Rotated(new Vector3(0, 0, 1), -Mathf.Pi / 2);
+                break;
+            case Axis3.Y:
+                break;
+            case Axis3.Z:
+                xform = xform.Rotated(new Vector3(1, 0, 0), Mathf.Pi / 2);
+                break;
+        }
+        
+        // Apply the flip
+        if (face.IsSignNegative())
+            xform = face.Axis().Rotate180Transform() * xform;
+        
+        // Apply the translation
+        var translation = Vector3.One * 0.5F;
+        translation[(int)face.Axis()] = face.IsSignNegative() ? 0F : 1F;
+        xform = xform.Translated(translation);
+
+        return xform;
+    });
 
     public void UpdateMesh(Material meshMaterial)
     {
-        if (_meshes == null)
+        if (_mesh == null)
         {
-            _meshes = new MultiMeshInstance3D[BlockFaceExt.VariantCount];
-            for (var i = 0; i < _meshes.Length; i++)
-                _meshes[i] = new MultiMeshInstance3D();
-            
-            foreach (var (i, mesh) in _meshes.AsEnumerable().Select((v, i) => (i, v)))
+            _mesh = new MultiMeshInstance3D
             {
-                var face = (BlockFace)i;
-                var centerOffset = Vector3.One * 0.5f;
-                centerOffset[(int)face.Axis()] = 0f;
-
-                mesh.Multimesh = new MultiMesh
+                Name = "ChunkMesh",
+                Multimesh = new MultiMesh
                 {
                     Mesh = new QuadMesh
                     {
-                        Orientation = (PlaneMesh.OrientationEnum)face.Axis(),
-                        FlipFaces = face.IsSignNegative(),
-                        CenterOffset = centerOffset,
+                        Orientation = PlaneMesh.OrientationEnum.Y,
+                        FlipFaces = false,
+                        CenterOffset = Vector3.Zero,
                         Material = meshMaterial,
                     },
                     TransformFormat = MultiMesh.TransformFormatEnum.Transform3D,
                     UseColors = true,
                     UseCustomData = false,
                     VisibleInstanceCount = 0,
-                    InstanceCount = 5000,
-                };
-
-                AddChild(mesh);
-            }
+                    InstanceCount = 8,
+                },
+            };
+            AddChild(_mesh);
         }
         
         // Construct voxel mesh data
-        foreach (var mesh in _meshes) mesh.Multimesh.VisibleInstanceCount = 0;
-        
         var chunk = this.Component<VoxelDataChunk>();
+        var mm = _mesh.Multimesh;
+        mm.VisibleInstanceCount = 0;
         
         for (var i = 0; i < VoxelCoordsExt.ChunkVolume; i++)
         {
@@ -61,14 +83,17 @@ public sealed partial class VoxelMeshChunk : Node
                 var neighborPos = ptr.Neighbor(face);
                 if (neighborPos.GetData() != 0) continue;
 
-                var mm = _meshes[(int)face].Multimesh;
-                
-                var instanceCenter = ptr.Pos - chunk.MinWorldPos;
-                if (!face.IsSignNegative())
-                    instanceCenter[(int)face.Axis()] += 1;
-                
-                mm.SetInstanceTransform(mm.VisibleInstanceCount, Transform3D.Identity.Translated(instanceCenter));
-                mm.SetInstanceColor(mm.VisibleInstanceCount++, Color.FromHsv(mainData / 5F, 0.5f, 0.5f));
+                if (mm.VisibleInstanceCount >= mm.InstanceCount)
+                {
+                    var buffer = mm.Buffer;
+                    System.Array.Resize(ref buffer, buffer.Length * 2);
+                    mm.InstanceCount *= 2;
+                    mm.Buffer = buffer;
+                }
+
+                var target = mm.VisibleInstanceCount++;
+                mm.SetInstanceColor(target, Color.FromHsv(mainData / 5F, 0.5f, 0.5f));
+                mm.SetInstanceTransform(target, BlockFaceTransforms[(int) face].Translated(ptr.Pos - chunk.MinWorldPos));
             }
         }
     }
