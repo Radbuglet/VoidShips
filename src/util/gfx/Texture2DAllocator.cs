@@ -1,56 +1,65 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using VoidShips.util.mem;
 using VoidShips.util.polyfill;
 
 namespace VoidShips.util.gfx;
 
-// TODO: Implement array shrinking
 [Component]
 public sealed partial class Texture2DAllocator : Node
 {
+    private const int MinLayers = 8;
+
     public Texture2DAllocatorConfig LayerConfig;
-    
     private Texture2DArray? _gpuTextureArray;
-    private readonly List<int> _freeSlots = new();
+    private readonly BitVector _reservedLayers = new();
 
     public override void _Ready()
     {
         var images = new Godot.Collections.Array<Image>();
-        for (var i = 0; i < 8; i++)
-        {
+        for (var i = 0; i < MinLayers; i++)
             images.Add(LayerConfig.CreateImage());
-            _freeSlots.Add(i);
-        }
 
         _gpuTextureArray = new Texture2DArray();
         _gpuTextureArray.CreateFromImages(images);
     }
 
-    public int AllocImage(Image image)
+    public int Allocate(Image image)
     {
-        if (_freeSlots.Pop(out var freeSlot))
+        // Find the smallest free layer index.
+        var index = _reservedLayers.AddSmallest();
+        
+        // If we have enough layers in our texture array, reuse the layer.
+        var layerCount = _gpuTextureArray!.GetLayers();
+        if (index < layerCount)
         {
-            _gpuTextureArray!.UpdateLayer(image, freeSlot);
-            return freeSlot;
+            _gpuTextureArray.UpdateLayer(image, index);
+            return index;
         }
 
-        var images = new Godot.Collections.Array<Image>(_gpuTextureArray!._Images);
-        var insertIndex = images.Count;
-        var addCount = Math.Max(1, images.Count);
-        for (var i = 0; i < addCount; i++)
-        {
-            images.Add(i == 0 ? image : LayerConfig.CreateImage());
-            if (i > 0) _freeSlots.Add(insertIndex + i);
-        }
-
-        _gpuTextureArray.CreateFromImages(images);
-        return insertIndex;
+        // Otherwise, double the number of layers, uploading our new image in the process.
+        var images = _gpuTextureArray!._Images;  // N.B. this clones the array already
+        images.EnsureMinLength(layerCount * 2, i => i == index ? image : LayerConfig.CreateImage());
+        _gpuTextureArray.CreateFromImages(images).AssertOk();
+        
+        return index;
     }
 
-    public void UnloadImage(int index)
+    public void Deallocate(int index)
     {
-        _freeSlots.Add(index);
+        _reservedLayers.Remove(index);
+        
+        // Truncate the array buffer
+        var smallestLength = _reservedLayers.SmallestLength();
+        var capacity = _gpuTextureArray!.GetLayers();
+
+        while (smallestLength < capacity / 2)
+            capacity /= 2;
+        
+        var images = new Godot.Collections.Array<Image>(_gpuTextureArray!._Images);
+        images.Truncate(capacity);
+        _gpuTextureArray.CreateFromImages(images).AssertOk();
     }
 }
 

@@ -9,9 +9,7 @@ public sealed class RegistryCache<T> where T : class
 
     public T Lookup(AbstractRegistry registry, short id)
     {
-        for (var i = _cached.Count; i <= id; i++)
-            _cached.Add(null);
-
+        _cached.EnsureMinLength(id + 1, _ => null);
         return _cached[id] ?? (_cached[id] = registry.Lookup(id).Component<T>());
     }
 }
