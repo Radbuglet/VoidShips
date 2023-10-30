@@ -1,6 +1,6 @@
 using Godot;
 using VoidShips.game.voxel.registry;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.voxel;
 
@@ -21,6 +21,6 @@ public sealed partial class VoxelWorldPalletized : Node
 
     public BlockDescriptorBase GetBlock(VoxelPointer pointer)
     {
-        return Registry.Lookup(pointer.GetData()).Component<BlockDescriptorBase>();
+        return Registry.LookupBaseDescriptor(pointer.GetData());
     }
 }

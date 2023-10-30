@@ -1,6 +1,6 @@
 using Godot;
 using VoidShips.game.registry;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.inventory.descriptor;
 

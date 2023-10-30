@@ -27,7 +27,6 @@ script = ExtResource("2_giamo")
 
 [node name="InventoryData" type="Node" parent="."]
 script = ExtResource("3_wqs0b")
-InventorySize = null
 
 [node name="DebugHud" type="RichTextLabel" parent="."]
 anchors_preset = 15

@@ -2,7 +2,8 @@ using Godot;
 using VoidShips.game.voxel;
 using VoidShips.game.voxel.loader;
 using VoidShips.game.voxel.math;
-using VoidShips.Util;
+using VoidShips.game.voxel.mesh;
+using VoidShips.util;
 
 namespace VoidShips.scripts;
 

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using VoidShips.game.voxel.math;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.voxel.registry;
 

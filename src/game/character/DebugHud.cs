@@ -1,7 +1,6 @@
 using Godot;
 using VoidShips.game.voxel;
-using VoidShips.game.voxel.loader;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.character;
 

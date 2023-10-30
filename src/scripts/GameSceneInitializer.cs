@@ -1,7 +1,7 @@
 using Godot;
 using VoidShips.game.inventory;
 using VoidShips.game.voxel.registry;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.scripts;
 

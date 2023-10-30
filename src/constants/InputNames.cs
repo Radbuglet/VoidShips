@@ -1,6 +1,6 @@
-namespace VoidShips.Constants;
-
 using Godot;
+
+namespace VoidShips.constants;
 
 public static class GameInputs
 {

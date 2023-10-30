@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Godot;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.registry;
 

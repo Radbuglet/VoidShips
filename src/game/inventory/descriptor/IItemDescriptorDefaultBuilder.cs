@@ -1,5 +1,5 @@
 using Godot;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.inventory.descriptor;
 

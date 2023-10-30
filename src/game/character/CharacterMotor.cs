@@ -1,8 +1,8 @@
 using Godot;
-using VoidShips.Constants;
+using VoidShips.constants;
 using VoidShips.game.voxel;
 using VoidShips.game.voxel.math;
-using VoidShips.Util;
+using VoidShips.util;
 
 namespace VoidShips.game.character;
 

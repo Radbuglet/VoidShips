@@ -1,9 +1,9 @@
-namespace VoidShips.Util;
-
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Godot;
+
+namespace VoidShips.util;
 
 public sealed partial class GameObject : RefCounted
 {
@@ -59,7 +59,7 @@ public static class GameObjectExt
 	public static T? TryComponent<T>(this Node target) where T : class
 	{
 		// Ensure that this type is actually a component.
-		Debug.Assert(Util.Component.HasCompAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {target.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(Util.Component)} attribute.");
+		Debug.Assert(util.Component.HasCompAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {target.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(util.Component)} attribute.");
 
 		// Get the game object's metadata.
 		var gobj = target.GameObject<Node>();
@@ -91,7 +91,7 @@ public static class GameObjectExt
 			)
 			{
 				// Ensure that the component is applicable
-				if (!Util.Component.HasCompAttr(ty))
+				if (!util.Component.HasCompAttr(ty))
 					return;
 
 				// Ensure that it's not a duplicate
@@ -124,7 +124,7 @@ public static class GameObjectExt
 		return meta.Comps.TryGetValue(typeof(T), out comp) ? (T)(object)comp : null;
 	}
 
-	public static T Component<T>(this Node target) where T : Node
+	public static T Component<T>(this Node target) where T : class
 	{
 		var comp = target.TryComponent<T>();
 		Debug.Assert(comp != null, $"{target.StringifyNode()} does not have component of type {typeof(T)}.");

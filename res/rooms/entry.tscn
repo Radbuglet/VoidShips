@@ -8,9 +8,9 @@
 [ext_resource type="Script" path="res://src/game/inventory/descriptor/ItemDescriptorVisual.cs" id="6_1sa0c"]
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockRegistry.cs" id="7_dofv0"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelDataWorld.cs" id="7_haog7"]
-[ext_resource type="Script" path="res://src/game/voxel/VoxelMeshWorld.cs" id="8_clxii"]
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
+[ext_resource type="Script" path="res://src/game/voxel/mesh/VoxelMeshWorld.cs" id="9_7shij"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelWorldPalletized.cs" id="11_6544e"]
 [ext_resource type="Script" path="res://src/game/voxel/loader/VoxelLoaderImmediate.cs" id="12_ew0mq"]
@@ -64,7 +64,7 @@ FriendlyName = "Stone"
 script = ExtResource("7_haog7")
 
 [node name="VoxelMeshWorld" type="Node" parent="."]
-script = ExtResource("8_clxii")
+script = ExtResource("9_7shij")
 MeshMaterial = ExtResource("9_0k8ko")
 
 [node name="VoxelWorldPalletized" type="Node" parent="."]

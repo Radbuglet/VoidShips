@@ -1,9 +1,9 @@
-namespace VoidShips.Util;
-
-using Godot;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using Godot;
+
+namespace VoidShips.util;
 
 public static class NodeUtil
 {
