@@ -1,7 +1,7 @@
 using Godot;
 using VoidShips.game.inventory;
 using VoidShips.game.voxel.registry;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.scripts;
 

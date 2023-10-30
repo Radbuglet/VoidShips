@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
-namespace VoidShips.util;
+namespace VoidShips.util.polyfill;
 
 public static class ArrayUtil
 {

@@ -1,6 +1,7 @@
 using Godot;
 using VoidShips.game.voxel.math;
-using VoidShips.util;
+using VoidShips.util.gfx;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.game.voxel.mesh;
 
@@ -40,7 +41,7 @@ public sealed partial class VoxelMeshChunk : Node
         return xform;
     });
 
-    public void UpdateMesh(Material meshMaterial)
+    public void UpdateMesh(VoxelMeshWorld meshWorld)
     {
         if (_mesh == null)
         {
@@ -54,7 +55,7 @@ public sealed partial class VoxelMeshChunk : Node
                         Orientation = PlaneMesh.OrientationEnum.Y,
                         FlipFaces = false,
                         CenterOffset = Vector3.Zero,
-                        Material = meshMaterial,
+                        Material = meshWorld.MeshMaterial,
                     },
                     TransformFormat = MultiMesh.TransformFormatEnum.Transform3D,
                     UseColors = true,
@@ -75,12 +76,12 @@ public sealed partial class VoxelMeshChunk : Node
         {
             var ptr = chunk.GetPointer(i);
             var mainData = ptr.GetData();
-            if (mainData == 0) continue;
+            if (!meshWorld.IsVisibleMaterial(mainData)) continue;
 
             foreach (var face in BlockFaceExt.BlockFaces())
             {
                 var neighborPos = ptr.Neighbor(face);
-                if (neighborPos.GetData() != 0) continue;
+                if (meshWorld.IsFullyOpaqueMaterial(neighborPos.GetData())) continue;
 
                 mm.ReserveCapacityForOne();
 

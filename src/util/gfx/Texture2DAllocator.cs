@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
 using Godot;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
-namespace VoidShips.game.voxel.mesh;
+namespace VoidShips.util.gfx;
 
-// TODO: Implement shrinking
+// TODO: Implement array shrinking
+[Component]
 public sealed partial class Texture2DAllocator : Node
 {
     public Texture2DAllocatorConfig LayerConfig;
     
     private Texture2DArray? _gpuTextureArray;
-    private readonly Dictionary<Image, int> _imageMap = new();
     private readonly List<int> _freeSlots = new();
 
     public override void _Ready()
@@ -27,14 +27,10 @@ public sealed partial class Texture2DAllocator : Node
         _gpuTextureArray.CreateFromImages(images);
     }
 
-    public int LoadImage(Image image)
+    public int AllocImage(Image image)
     {
-        if (_imageMap.TryGetValue(image, out var index))
-            return index;
-
         if (_freeSlots.Pop(out var freeSlot))
         {
-            _imageMap.Add(image, freeSlot);
             _gpuTextureArray!.UpdateLayer(image, freeSlot);
             return freeSlot;
         }
@@ -49,14 +45,11 @@ public sealed partial class Texture2DAllocator : Node
         }
 
         _gpuTextureArray.CreateFromImages(images);
-        _imageMap.Add(image, insertIndex);
         return insertIndex;
     }
 
-    public void UnloadImage(Image image)
+    public void UnloadImage(int index)
     {
-        var index = _imageMap[image];
-        _imageMap.Remove(image);
         _freeSlots.Add(index);
     }
 }

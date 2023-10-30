@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=18 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -9,8 +9,10 @@
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockRegistry.cs" id="7_dofv0"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelDataWorld.cs" id="7_haog7"]
 [ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorBase.cs" id="8_imvcx"]
+[ext_resource type="Script" path="res://src/game/voxel/registry/BlockDescriptorVisual.cs" id="8_mhxpf"]
 [ext_resource type="Material" uid="uid://bnbr1piq455v" path="res://res/materials/block_material.tres" id="9_0k8ko"]
 [ext_resource type="Script" path="res://src/game/voxel/mesh/VoxelMeshWorld.cs" id="9_7shij"]
+[ext_resource type="Texture2D" uid="uid://dhx23b0y048vn" path="res://res/textures/proto_1.png" id="9_jpi5q"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelWorldPalletized.cs" id="11_6544e"]
 [ext_resource type="Script" path="res://src/game/voxel/loader/VoxelLoaderImmediate.cs" id="12_ew0mq"]
@@ -53,12 +55,19 @@ IsSolid = false
 Id = "air"
 FriendlyName = "Air"
 
+[node name="BlockDescriptorVisual" type="Node" parent="BlockRegistry/AirDescriptor"]
+script = ExtResource("8_mhxpf")
+
 [node name="StoneDescriptor" type="Node" parent="BlockRegistry" groups=["game_object"]]
 
 [node name="BlockDescriptorBase" type="Node" parent="BlockRegistry/StoneDescriptor"]
 script = ExtResource("8_imvcx")
 Id = "stone"
 FriendlyName = "Stone"
+
+[node name="BlockDescriptorVisual" type="Node" parent="BlockRegistry/StoneDescriptor"]
+script = ExtResource("8_mhxpf")
+Texture = ExtResource("9_jpi5q")
 
 [node name="VoxelDataWorld" type="Node" parent="."]
 script = ExtResource("7_haog7")

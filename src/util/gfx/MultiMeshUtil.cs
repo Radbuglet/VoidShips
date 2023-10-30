@@ -1,6 +1,6 @@
 using Godot;
 
-namespace VoidShips.util;
+namespace VoidShips.util.gfx;
 
 public static class MultiMeshUtil
 {

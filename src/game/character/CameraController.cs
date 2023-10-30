@@ -1,5 +1,5 @@
 using Godot;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.game.character;
 

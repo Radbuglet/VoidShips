@@ -3,7 +3,7 @@ using VoidShips.game.voxel;
 using VoidShips.game.voxel.loader;
 using VoidShips.game.voxel.math;
 using VoidShips.game.voxel.mesh;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.scripts;
 

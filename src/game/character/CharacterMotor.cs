@@ -2,7 +2,7 @@ using Godot;
 using VoidShips.constants;
 using VoidShips.game.voxel;
 using VoidShips.game.voxel.math;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.game.character;
 

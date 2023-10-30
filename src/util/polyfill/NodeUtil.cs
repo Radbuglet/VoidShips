@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace VoidShips.util;
+namespace VoidShips.util.polyfill;
 
 public static class NodeUtil
 {

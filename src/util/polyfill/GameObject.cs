@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Godot;
 
-namespace VoidShips.util;
+namespace VoidShips.util.polyfill;
 
 public sealed partial class GameObject : RefCounted
 {
@@ -59,7 +59,7 @@ public static class GameObjectExt
 	public static T? TryComponent<T>(this Node target) where T : class
 	{
 		// Ensure that this type is actually a component.
-		Debug.Assert(util.Component.HasCompAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {target.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(util.Component)} attribute.");
+		Debug.Assert(polyfill.Component.HasCompAttr(typeof(T)), $"Attempted to fetch a component of type {typeof(T)} from {target.StringifyNode()}, despite the fact that {typeof(T)} lacks the {nameof(polyfill.Component)} attribute.");
 
 		// Get the game object's metadata.
 		var gobj = target.GameObject<Node>();
@@ -91,7 +91,7 @@ public static class GameObjectExt
 			)
 			{
 				// Ensure that the component is applicable
-				if (!util.Component.HasCompAttr(ty))
+				if (!polyfill.Component.HasCompAttr(ty))
 					return;
 
 				// Ensure that it's not a duplicate

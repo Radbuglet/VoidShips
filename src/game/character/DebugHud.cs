@@ -1,6 +1,6 @@
 using Godot;
 using VoidShips.game.voxel;
-using VoidShips.util;
+using VoidShips.util.polyfill;
 
 namespace VoidShips.game.character;
 
