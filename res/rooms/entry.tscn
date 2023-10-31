@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://cb642xa7kwqyk"]
+[gd_scene load_steps=21 format=3 uid="uid://cb642xa7kwqyk"]
 
 [ext_resource type="Script" path="res://src/game/inventory/ItemRegistry.cs" id="1_jgjs8"]
 [ext_resource type="Environment" uid="uid://bw7033wsh0sj1" path="res://res/environments/sunny.tres" id="1_rpbss"]
@@ -15,7 +15,10 @@
 [ext_resource type="Texture2D" uid="uid://dhx23b0y048vn" path="res://res/textures/proto_1.png" id="9_jpi5q"]
 [ext_resource type="Script" path="res://src/scripts/VoxelDemoRunner.cs" id="10_hdkvm"]
 [ext_resource type="Script" path="res://src/game/voxel/VoxelWorldPalletized.cs" id="11_6544e"]
+[ext_resource type="Script" path="res://src/game/voxel/mesh/VoxelMeshAssets.cs" id="11_yjej3"]
 [ext_resource type="Script" path="res://src/game/voxel/loader/VoxelLoaderImmediate.cs" id="12_ew0mq"]
+[ext_resource type="Shader" path="res://res/shaders/block.gdshader" id="12_iqt4y"]
+[ext_resource type="Script" path="res://src/util/gfx/VaryingTexture2DAllocator.cs" id="13_acqhy"]
 [ext_resource type="PackedScene" uid="uid://bg72uoyxm4qyj" path="res://res/actors/voxel_chunk.tscn" id="13_t2umf"]
 
 [node name="Entry" type="Node3D" groups=["game_object"]]
@@ -71,6 +74,13 @@ Texture = ExtResource("9_jpi5q")
 
 [node name="VoxelDataWorld" type="Node" parent="."]
 script = ExtResource("7_haog7")
+
+[node name="VoxelMeshAssets" type="Node" parent="."]
+script = ExtResource("11_yjej3")
+MeshShader = ExtResource("12_iqt4y")
+
+[node name="VaryingTexture2DAllocator" type="Node" parent="."]
+script = ExtResource("13_acqhy")
 
 [node name="VoxelMeshWorld" type="Node" parent="."]
 script = ExtResource("9_7shij")

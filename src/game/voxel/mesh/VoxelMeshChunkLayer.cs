@@ -67,6 +67,11 @@ public sealed partial class VoxelMeshChunkLayer : Node
         AddChild(_mesh);
     }
 
+    public void BeginUpload()
+    {
+        _mesh!.Multimesh.VisibleInstanceCount = 0;
+    }
+
     public void PushFace(Vector3I blockWorldPos, BlockFace face, Color data)
     {
         _mesh!.Multimesh.ReserveCapacityForOne();
@@ -76,7 +81,7 @@ public sealed partial class VoxelMeshChunkLayer : Node
         _mesh!.Multimesh.SetInstanceTransform(target, BlockFaceTransforms[(int) face].Translated(blockWorldPos - MinBlockEntityPos));
     }
 
-    public void CompleteUpload()
+    public void FinishUpload()
     {
         // Try to shrink the buffer if we ended up being significantly smaller than it
         _mesh!.Multimesh.ShrinkCapacity();

@@ -8,8 +8,14 @@ namespace VoidShips.game.voxel.mesh;
 public sealed partial class VoxelMeshWorld : Node
 {
 	[Export] public Material? MeshMaterial;
-
+	
+	internal VoxelMeshAssets? AssetRegistry { get; private set; }
 	private long _updateGeneration;
+
+	public override void _Ready()
+	{
+		AssetRegistry = this.Component<VoxelMeshAssets>();
+	}
 
 	public void UpdateMeshes(IEnumerable<VoxelDataChunk> chunks)
 	{

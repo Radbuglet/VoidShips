@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace VoidShips.util.polyfill;
 
@@ -24,7 +23,7 @@ public static class ArrayUtil
         return values.Pop(out _);
     }
 
-    public static bool Pop<T>(this IList<T> values, [NotNullWhen(true)] out T? value)
+    public static bool Pop<T>(this IList<T> values, out T? value)
     {
         if (values.Count == 0)
         {
@@ -47,6 +46,18 @@ public static class ArrayUtil
     {
         while (list.Count > len)
             list.Pop();
+    }
+
+    public static bool TryGet<T>(this IList<T> list, int index, out T? value)
+    {
+        if (list.Count <= index)
+        {
+            value = default;
+            return false;
+        }
+
+        value = list[index]!;
+        return true;
     }
 }
 
